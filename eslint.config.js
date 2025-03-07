@@ -28,6 +28,7 @@ export default [
   },
   {
     rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
       '@stylistic/function-call-spacing': 'error',
       '@stylistic/brace-style': [
         'error',
