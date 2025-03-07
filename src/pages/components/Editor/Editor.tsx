@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import {
   Stage, Layer, Image, Transformer,
 } from 'react-konva'
@@ -7,22 +7,19 @@ import ImageUploader from './tools/ImageUploader'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Image as KonvaImage } from 'konva/lib/shapes/Image'
 import { downloadStage } from './utils/download'
+import useSelectImage from './hooks/useSelectImage'
 
 export default function Editor () {
   const [images, setImages] = useState<EditorImage[]>([])
-
   const stageRef = useRef<KonvaStage>(null)
-  const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
-
   const imageRefs = useRef<Record<string, KonvaImage>>({})
-  const trRef = useRef(null)
 
-  useEffect(() => {
-    if (selectedImageId && trRef.current) {
-      trRef.current.nodes([imageRefs.current[selectedImageId]])
-      trRef.current.getLayer().batchDraw()
-    }
-  }, [selectedImageId])
+  const {
+    selectedImageId,
+    setSelectedImageId,
+    trRef,
+    resetSelectedImage,
+  } = useSelectImage(imageRefs, stageRef)
 
   return (
     <div>
@@ -31,11 +28,7 @@ export default function Editor () {
           width={500}
           height={500}
           ref={stageRef}
-          onClick={(event) => {
-            if (event.target === stageRef.current) {
-              setSelectedImageId(null)
-            }
-          }}
+          onClick={resetSelectedImage}
         >
           <Layer>
             {
