@@ -3,13 +3,15 @@ import { Stage, Layer } from 'react-konva'
 import type { EditorImage } from './types/Editor'
 import ImageUploader from './tools/ImageUploader'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
-import { downloadStage } from './utils/download'
+import { Layer as KonvaLayer } from 'konva/lib/Layer'
+import { downloadGif, downloadPng } from './utils/download'
 import MemeImage from './tools/MemeImage'
 import useSelectImage from './hooks/useSelectImage'
 
 export default function Editor () {
   const [images, setImages] = useState<EditorImage[]>([])
   const stageRef = useRef<KonvaStage>(null)
+  const layerRef = useRef<KonvaLayer>(null)
   const { selectedId, selectImage, deselectImage } = useSelectImage()
 
   return (
@@ -21,7 +23,7 @@ export default function Editor () {
           ref={stageRef}
           onClick={deselectImage}
         >
-          <Layer>
+          <Layer ref={layerRef}>
             {
               images.map(image => (
                 <MemeImage
@@ -38,7 +40,14 @@ export default function Editor () {
 
       <div>
         <ImageUploader addImage={image => setImages([...images, image])} />
-        <button onClick={() => downloadStage(stageRef.current)}>밈 저장하기</button>
+        <button onClick={() => {
+          deselectImage()
+          const hasGif = images.some(({ type }) => type === 'gif')
+          if (hasGif) downloadGif(layerRef.current)
+          else downloadPng(stageRef.current)
+        }}
+        >밈 저장하기
+        </button>
       </div>
     </div>
   )
