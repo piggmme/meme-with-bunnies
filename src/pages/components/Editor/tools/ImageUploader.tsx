@@ -9,12 +9,15 @@ interface ImageUploaderProps {
 export default function ImageUploader ({
   addImage,
 }: ImageUploaderProps) {
-  const { imageElement, size, handleImageUpload, reset } = useImageUpload()
+  const {
+    src, imageElement, size, handleImageUpload, reset,
+  } = useImageUpload()
 
   useEffect(() => {
     if (imageElement) {
       addImage({
         id: String(Date.now()),
+        src,
         image: imageElement,
         width: size.width,
         height: size.height,

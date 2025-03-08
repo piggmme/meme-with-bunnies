@@ -1,19 +1,26 @@
-import { useState, useRef } from 'react'
-import {
-  Stage, Layer, Image,
-} from 'react-konva'
+import { useState, useRef, useCallback } from 'react'
+import { Stage, Layer } from 'react-konva'
 import type { EditorImage } from './types/Editor'
 import ImageUploader from './tools/ImageUploader'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Image as KonvaImage } from 'konva/lib/shapes/Image'
 import { downloadStage } from './utils/download'
 import ImageTransformer from './tools/ImageTransformer'
+import MemeImage from './tools/MemeImage'
 
 export default function Editor () {
   const [images, setImages] = useState<EditorImage[]>([])
   const stageRef = useRef<KonvaStage>(null)
   const imageRefs = useRef<Record<string, KonvaImage>>({})
   const trRef = useRef<any>(null)
+
+  const setImageRef = useCallback((id: string, element?: KonvaImage) => {
+    if (element) {
+      imageRefs.current[id] = element
+    } else {
+      return imageRefs.current?.[id]
+    }
+  }, [])
 
   return (
     <div>
@@ -27,16 +34,11 @@ export default function Editor () {
           <Layer>
             {
               images.map(image => (
-                <Image
+                <MemeImage
                   key={image.id}
-                  image={image.image}
-                  width={image.width}
-                  height={image.height}
-                  draggable
+                  image={image}
                   onClick={() => trRef.current?.setSelectedImageId(image.id)}
-                  ref={(el) => {
-                    if (el) imageRefs.current[image.id] = el
-                  }}
+                  ref={setImageRef}
                 />
               ))
             }

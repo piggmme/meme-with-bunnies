@@ -1,6 +1,7 @@
 export interface EditorImage {
   id: string
-  image: HTMLImageElement
+  src: string
+  image: HTMLImageElement | HTMLCanvasElement
   width: number
   height: number
 }
