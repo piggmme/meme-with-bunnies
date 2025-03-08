@@ -1,4 +1,4 @@
-import { Image, type KonvaNodeEvents } from 'react-konva'
+import { Image, Transformer, type KonvaNodeEvents } from 'react-konva'
 import type { EditorImage } from '../types/Editor'
 import { Image as KonvaImage } from 'konva/lib/shapes/Image'
 import { useEffect, useMemo, useRef } from 'react'
@@ -6,12 +6,17 @@ import { useEffect, useMemo, useRef } from 'react'
 interface MemeImageProps {
   image: EditorImage
   onClick?: KonvaNodeEvents['onClick']
+  isSelected?: boolean
+  onSelect: (id: string) => void
 }
 
 export default function MemeImage ({
   image,
   onClick,
+  isSelected = false,
+  onSelect,
 }: MemeImageProps) {
+  const trRef = useRef<any>(null)
   const imageRef = useRef<KonvaImage>(null)
   const imageCanvas = useMemo(() => {
     const node = document.createElement('canvas')
@@ -33,6 +38,13 @@ export default function MemeImage ({
     return () => anim.stop()
   }, [image.src, imageCanvas])
 
+  useEffect(() => {
+    if (isSelected && trRef.current) {
+      trRef.current.nodes([imageRef.current])
+      trRef.current.getLayer().batchDraw()
+    }
+  }, [isSelected, trRef.current])
+
   return (
     <>
       <Image
@@ -41,9 +53,14 @@ export default function MemeImage ({
         width={image.size.width}
         height={image.size.height}
         draggable
-        onClick={onClick}
+        onClick={(e) => {
+          e.cancelBubble = true // 이벤트 버블링 방지
+          onSelect(image.id)
+          onClick?.(e)
+        }}
         ref={imageRef}
       />
+      {isSelected && <Transformer ref={trRef} />}
     </>
   )
 }

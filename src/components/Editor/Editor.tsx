@@ -1,26 +1,23 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef } from 'react'
 import { Stage, Layer } from 'react-konva'
 import type { EditorImage } from './types/Editor'
 import ImageUploader from './tools/ImageUploader'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
-import { Image as KonvaImage } from 'konva/lib/shapes/Image'
 import { downloadStage } from './utils/download'
-import ImageTransformer from './tools/ImageTransformer'
 import MemeImage from './tools/MemeImage'
 
 export default function Editor () {
   const [images, setImages] = useState<EditorImage[]>([])
   const stageRef = useRef<KonvaStage>(null)
-  const imageRefs = useRef<Record<string, KonvaImage>>({})
-  const trRef = useRef<any>(null)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
 
-  const setImageRef = useCallback((id: string, element?: KonvaImage) => {
-    if (element) {
-      imageRefs.current[id] = element
-    } else {
-      return imageRefs.current?.[id]
-    }
-  }, [])
+  const handleSelect = (id: string) => {
+    setSelectedId(id)
+  }
+
+  const handleDeselect = () => {
+    setSelectedId(null)
+  }
 
   return (
     <div>
@@ -29,7 +26,7 @@ export default function Editor () {
           width={500}
           height={500}
           ref={stageRef}
-          onClick={trRef.current?.resetSelectedImage}
+          onClick={handleDeselect}
         >
           <Layer>
             {
@@ -37,11 +34,11 @@ export default function Editor () {
                 <MemeImage
                   key={image.id}
                   image={image}
-                  onClick={() => trRef.current?.setSelectedImageId(image.id)}
+                  isSelected={image.id === selectedId}
+                  onSelect={handleSelect}
                 />
               ))
             }
-            {/* <ImageTransformer imageRefs={imageRefs} stageRef={stageRef} ref={trRef} /> */}
           </Layer>
         </Stage>
       </div>
