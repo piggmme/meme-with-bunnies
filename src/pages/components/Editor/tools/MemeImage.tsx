@@ -15,7 +15,6 @@ export default function MemeImage ({
 }: MemeImageProps & { ref: (id: string, element?: KonvaImage) => KonvaImage | undefined }) {
   useEffect(() => {
     const imageRef = ref(image.id)
-    console.log(image, imageRef)
     if (image.image instanceof HTMLImageElement) return
     // save animation instance to stop it on unmount
     let anim
@@ -28,7 +27,7 @@ export default function MemeImage ({
       }
     })
     return () => anim.stop()
-  }, [image.src, image.image, ref])
+  }, [image.src, image.image])
 
   return (
     <Image
