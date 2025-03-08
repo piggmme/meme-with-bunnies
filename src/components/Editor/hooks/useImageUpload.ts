@@ -3,7 +3,7 @@ import 'gifler'
 import type { EditorImage } from '../types/Editor'
 
 export function useImageUpload (onUpload: (image: EditorImage) => void) {
-  const [src, setSrc] = useState<string>('')
+  const [src, setSrc] = useState<string | null>(null)
   const [type, setType] = useState<'gif' | 'image' | null>(null)
 
   const handleImageUpload = (e) => {
@@ -34,6 +34,8 @@ export function useImageUpload (onUpload: (image: EditorImage) => void) {
             height: img.height / 2,
           },
         })
+        setSrc(null)
+        setType(null)
       }
     }
   }, [src, type])
