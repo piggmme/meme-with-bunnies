@@ -58,6 +58,10 @@ export default function MemeImage ({
           onSelect(image.id)
           onClick?.(e)
         }}
+        onTouchEnd={(e) => {
+          e.cancelBubble = true // 이벤트 버블링 방지
+          onSelect(image.id)
+        }}
         ref={imageRef}
       />
       {isSelected && <Transformer ref={trRef} />}
