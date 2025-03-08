@@ -40,9 +40,9 @@ function exportFile (url: string, name = RESULT_NAME) {
   document.body.removeChild(link)
 }
 
-function exportVid (blob: Blob) {
+function exportVid (blob: Blob, name = RESULT_NAME) {
   const url = URL.createObjectURL(blob)
-  exportFile(url)
+  exportFile(url, name)
   URL.revokeObjectURL(url)
 }
 
@@ -56,8 +56,8 @@ export const downloadPng = (konvaStage: KonvaStage | null, name = RESULT_NAME) =
   exportPng(konvaStage, name)
 }
 
-export const downloadGif = async (konvaLayer: KonvaLayer | null) => {
+export const downloadGif = async (konvaLayer: KonvaLayer | null, name = RESULT_NAME) => {
   if (!konvaLayer) return
   const blob = await startRecording(konvaLayer)
-  exportVid(blob)
+  exportVid(blob, name)
 }
