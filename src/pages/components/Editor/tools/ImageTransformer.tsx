@@ -1,4 +1,4 @@
-import { useEffect, useImperativeHandle, useRef, type RefObject } from 'react'
+import { useImperativeHandle, useRef, type RefObject } from 'react'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import useSelectImage from '../hooks/useSelectImage'
 import { Image as KonvaImage } from 'konva/lib/shapes/Image'
@@ -19,8 +19,6 @@ export default function ImageTransformer ({
     setSelectedImageId,
     resetSelectedImage,
   } = useSelectImage(imageRefs, stageRef, trRef)
-
-  console.log({ stageRef, ref, trRef })
 
   useImperativeHandle(ref, () => ({
     setSelectedImageId,
