@@ -1,31 +1,19 @@
-import type { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node'
-import { Image as KonvaImage } from 'konva/lib/shapes/Image'
-import { useEffect, useState, type RefObject } from 'react'
-import { Stage as KonvaStage } from 'konva/lib/Stage'
+import { useState } from 'react'
 
-export default function useSelectImage (
-  imageRefs: RefObject<Record<string, KonvaImage>>,
-  stageRef: RefObject<KonvaStage | null>,
-  trRef: RefObject<any | null>,
-) {
-  const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
+export default function useSelectImage () {
+  const [selectedId, setSelectedId] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (selectedImageId && trRef.current) {
-      trRef.current.nodes([imageRefs.current[selectedImageId]])
-      trRef.current.getLayer().batchDraw()
-    }
-  }, [selectedImageId, trRef.current])
+  const selectImage = (id: string) => {
+    setSelectedId(id)
+  }
 
-  const resetSelectedImage = (event: KonvaEventObject<MouseEvent, Node<NodeConfig>>) => {
-    if (event.target === stageRef.current) {
-      setSelectedImageId(null)
-    }
+  const deselectImage = () => {
+    setSelectedId(null)
   }
 
   return {
-    selectedImageId,
-    setSelectedImageId,
-    resetSelectedImage,
+    selectedId,
+    selectImage,
+    deselectImage,
   }
 }

@@ -5,19 +5,12 @@ import ImageUploader from './tools/ImageUploader'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { downloadStage } from './utils/download'
 import MemeImage from './tools/MemeImage'
+import useSelectImage from './hooks/useSelectImage'
 
 export default function Editor () {
   const [images, setImages] = useState<EditorImage[]>([])
   const stageRef = useRef<KonvaStage>(null)
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-
-  const handleSelect = (id: string) => {
-    setSelectedId(id)
-  }
-
-  const handleDeselect = () => {
-    setSelectedId(null)
-  }
+  const { selectedId, selectImage, deselectImage } = useSelectImage()
 
   return (
     <div>
@@ -26,7 +19,7 @@ export default function Editor () {
           width={500}
           height={500}
           ref={stageRef}
-          onClick={handleDeselect}
+          onClick={deselectImage}
         >
           <Layer>
             {
@@ -35,7 +28,7 @@ export default function Editor () {
                   key={image.id}
                   image={image}
                   isSelected={image.id === selectedId}
-                  onSelect={handleSelect}
+                  onSelect={selectImage}
                 />
               ))
             }
