@@ -16,5 +16,12 @@ export default defineConfig({
         'Cross-Origin-Opener-Policy': 'same-origin',
       },
     },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@import "./global.scss";`,
+        },
+      },
+    },
   },
 })

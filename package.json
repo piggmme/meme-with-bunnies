@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
@@ -22,7 +22,8 @@
     "konva": "^9.3.18",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-konva": "^19.0.3"
+    "react-konva": "^19.0.3",
+    "sass": "^1.85.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
