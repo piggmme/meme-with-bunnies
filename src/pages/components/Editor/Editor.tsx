@@ -1,25 +1,19 @@
 import { useState, useRef } from 'react'
 import {
-  Stage, Layer, Image, Transformer,
+  Stage, Layer, Image,
 } from 'react-konva'
 import type { EditorImage } from './types/Editor'
 import ImageUploader from './tools/ImageUploader'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Image as KonvaImage } from 'konva/lib/shapes/Image'
 import { downloadStage } from './utils/download'
-import useSelectImage from './hooks/useSelectImage'
+import ImageTransformer from './tools/ImageTransformer'
 
 export default function Editor () {
   const [images, setImages] = useState<EditorImage[]>([])
   const stageRef = useRef<KonvaStage>(null)
   const imageRefs = useRef<Record<string, KonvaImage>>({})
-
-  const {
-    selectedImageId,
-    setSelectedImageId,
-    trRef,
-    resetSelectedImage,
-  } = useSelectImage(imageRefs, stageRef)
+  const trRef = useRef<any>(null)
 
   return (
     <div>
@@ -28,7 +22,7 @@ export default function Editor () {
           width={500}
           height={500}
           ref={stageRef}
-          onClick={resetSelectedImage}
+          onClick={trRef.current?.resetSelectedImage}
         >
           <Layer>
             {
@@ -39,14 +33,14 @@ export default function Editor () {
                   width={image.width}
                   height={image.height}
                   draggable
-                  onClick={() => setSelectedImageId(image.id)}
+                  onClick={() => trRef.current?.setSelectedImageId(image.id)}
                   ref={(el) => {
                     if (el) imageRefs.current[image.id] = el
                   }}
                 />
               ))
             }
-            {selectedImageId && <Transformer ref={trRef} />}
+            <ImageTransformer imageRefs={imageRefs} stageRef={stageRef} ref={trRef} />
           </Layer>
         </Stage>
       </div>
