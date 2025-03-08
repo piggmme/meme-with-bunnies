@@ -1,7 +1,7 @@
 import { Image, type KonvaNodeEvents } from 'react-konva'
 import type { EditorImage } from '../types/Editor'
 import { Image as KonvaImage } from 'konva/lib/shapes/Image'
-import { useEffect } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 
 interface MemeImageProps {
   image: EditorImage
@@ -11,33 +11,39 @@ interface MemeImageProps {
 export default function MemeImage ({
   image,
   onClick,
-  ref,
-}: MemeImageProps & { ref: (id: string, element?: KonvaImage) => KonvaImage | undefined }) {
+}: MemeImageProps) {
+  const imageRef = useRef<KonvaImage>(null)
+  const imageCanvas = useMemo(() => {
+    const node = document.createElement('canvas')
+    return node
+  }, [])
+
   useEffect(() => {
-    const imageRef = ref(image.id)
-    if (image.image instanceof HTMLImageElement) return
+    if (image.type === 'image') return
     // save animation instance to stop it on unmount
     let anim
     window.gifler(image.src).get((a) => {
       anim = a
-      anim.animateInCanvas(image.image)
+      anim.animateInCanvas(imageCanvas)
       anim.onDrawFrame = (ctx, frame) => {
         ctx.drawImage(frame.buffer, frame.x, frame.y)
-        if (imageRef) imageRef.getLayer()?.draw()
+        imageRef.current?.getLayer()?.draw()
       }
     })
     return () => anim.stop()
-  }, [image.src, image.image])
+  }, [image.src, imageCanvas])
 
   return (
-    <Image
-      key={image.id}
-      image={image.image}
-      width={image.width}
-      height={image.height}
-      draggable
-      onClick={onClick}
-      ref={(el) => { if (el) ref?.(image.id, el) }}
-    />
+    <>
+      <Image
+        key={image.id}
+        image={image.type === 'gif' ? imageCanvas : image.image}
+        width={image.size.width}
+        height={image.size.height}
+        draggable
+        onClick={onClick}
+        ref={imageRef}
+      />
+    </>
   )
 }

@@ -38,11 +38,10 @@ export default function Editor () {
                   key={image.id}
                   image={image}
                   onClick={() => trRef.current?.setSelectedImageId(image.id)}
-                  ref={setImageRef}
                 />
               ))
             }
-            <ImageTransformer imageRefs={imageRefs} stageRef={stageRef} ref={trRef} />
+            {/* <ImageTransformer imageRefs={imageRefs} stageRef={stageRef} ref={trRef} /> */}
           </Layer>
         </Stage>
       </div>

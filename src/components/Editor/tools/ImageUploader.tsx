@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useImageUpload } from '../hooks/useImageUpload'
 import type { EditorImage } from '../types/Editor'
 
@@ -9,22 +8,7 @@ interface ImageUploaderProps {
 export default function ImageUploader ({
   addImage,
 }: ImageUploaderProps) {
-  const {
-    src, imageElement, size, handleImageUpload, reset,
-  } = useImageUpload()
-
-  useEffect(() => {
-    if (imageElement) {
-      addImage({
-        id: String(Date.now()),
-        src,
-        image: imageElement,
-        width: size.width,
-        height: size.height,
-      })
-      reset()
-    }
-  }, [imageElement, size, addImage])
+  const { handleImageUpload } = useImageUpload(addImage)
 
   return (
     <input type='file' accept='image/*' onChange={handleImageUpload} />
