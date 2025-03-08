@@ -31,25 +31,24 @@ function startRecording (konvaLayer: KonvaLayer): Promise<Blob> {
   })
 }
 
-function exportVid (blob: Blob) {
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'meme.webm'
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
-}
-
-function exportPng (konvaStage: KonvaStage, name = RESULT_NAME) {
-  const uri = konvaStage.toDataURL({ pixelRatio: 2 })
+function exportFile (url: string, name = RESULT_NAME) {
   const link = document.createElement('a')
-  link.href = uri
+  link.href = url
   link.download = name
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
+}
+
+function exportVid (blob: Blob) {
+  const url = URL.createObjectURL(blob)
+  exportFile(url)
+  URL.revokeObjectURL(url)
+}
+
+function exportPng (konvaStage: KonvaStage, name = RESULT_NAME) {
+  const url = konvaStage.toDataURL({ pixelRatio: 2 })
+  exportFile(url, name)
 }
 
 export const downloadPng = (konvaStage: KonvaStage | null, name = RESULT_NAME) => {
