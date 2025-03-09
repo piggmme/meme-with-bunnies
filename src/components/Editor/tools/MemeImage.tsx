@@ -54,12 +54,11 @@ export default function MemeImage ({
         height={image.size.height}
         draggable
         onClick={(e) => {
-          e.cancelBubble = true // 이벤트 버블링 방지
+          e.cancelBubble = true
           onSelect(image.id)
           onClick?.(e)
         }}
-        onTouchEnd={(e) => {
-          e.cancelBubble = true // 이벤트 버블링 방지
+        onTouchEnd={() => {
           onSelect(image.id)
         }}
         ref={imageRef}
