@@ -1,15 +1,16 @@
 import { useState, useRef } from 'react'
 import { Stage, Layer } from 'react-konva'
-import type { EditorImage } from './types/Editor'
 import ImageUploader from './tools/ImageUploader'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Layer as KonvaLayer } from 'konva/lib/Layer'
 import { downloadGif, downloadPng } from './utils/download'
 import MemeImage from './tools/MemeImage'
 import useSelectImage from './hooks/useSelectImage'
+import { useStore } from '@nanostores/react'
+import { $editorImages } from '@/stores/editorState'
 
 export default function Editor () {
-  const [images, setImages] = useState<EditorImage[]>([])
+  const editorImages = useStore($editorImages)
   const stageRef = useRef<KonvaStage>(null)
   const layerRef = useRef<KonvaLayer>(null)
   const { selectedId, selectImage, deselectImage } = useSelectImage()
@@ -28,7 +29,7 @@ export default function Editor () {
         >
           <Layer ref={layerRef}>
             {
-              images.map(image => (
+              editorImages.map(image => (
                 <MemeImage
                   key={image.id}
                   image={image}
@@ -42,11 +43,11 @@ export default function Editor () {
       </div>
 
       <div>
-        <ImageUploader addImage={image => setImages([...images, image])} />
+        <ImageUploader addImage={image => $editorImages.set([...editorImages, image])} />
         <button onClick={async () => {
           deselectImage()
           setIsDownloading(true)
-          const hasGif = images.some(({ type }) => type === 'gif')
+          const hasGif = editorImages.some(({ type }) => type === 'gif')
           if (hasGif) await downloadGif(layerRef.current)
           else downloadPng(stageRef.current)
           setIsDownloading(false)
