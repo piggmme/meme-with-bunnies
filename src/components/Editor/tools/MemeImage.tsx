@@ -16,6 +16,14 @@ interface MemeImageProps {
   moveToTop?: (id: string) => void // 추가
 }
 
+interface ImageInfo {
+  x: number
+  y: number
+  width: number
+  height: number
+  rotation: number
+}
+
 const CONTROL_BUTTON_SIZE = 24
 
 export default function MemeImage ({
@@ -33,7 +41,7 @@ export default function MemeImage ({
     return node
   }, [])
 
-  const [imageProps, setImageProps] = useState({
+  const [imageInfo, setImageInfo] = useState<ImageInfo>({
     x: 0,
     y: 0,
     width: image.size.width,
@@ -44,7 +52,7 @@ export default function MemeImage ({
   // 초기 위치 설정
   useEffect(() => {
     if (imageRef.current) {
-      setImageProps({
+      setImageInfo({
         x: imageRef.current.x(),
         y: imageRef.current.y(),
         width: imageRef.current.width(),
@@ -76,34 +84,6 @@ export default function MemeImage ({
     }
   }, [isSelected, trRef.current])
 
-  const deleteButtonPosition = useMemo(() => {
-    const rad = (imageProps.rotation * Math.PI) / 180
-    const dx = imageProps.width * Math.cos(rad)
-    const dy = imageProps.width * Math.sin(rad)
-
-    return {
-      x: imageProps.x + dx,
-      y: imageProps.y + dy,
-    }
-  }, [imageProps])
-
-  const moveToTopButtonPosition = useMemo(() => {
-    const rad = (imageProps.rotation * Math.PI) / 180
-
-    // 이미지의 왼쪽 하단 좌표를 회전 변환
-    const dx = 0
-    const dy = imageProps.height
-
-    // 회전된 좌표 계산
-    const rotatedX = dx * Math.cos(rad) - dy * Math.sin(rad)
-    const rotatedY = dx * Math.sin(rad) + dy * Math.cos(rad)
-
-    return {
-      x: imageProps.x + rotatedX,
-      y: imageProps.y + rotatedY,
-    }
-  }, [imageProps])
-
   return (
     <>
       <Image
@@ -122,7 +102,7 @@ export default function MemeImage ({
         }}
         onDragMove={(e) => {
           const node = e.target
-          setImageProps(prev => ({
+          setImageInfo(prev => ({
             ...prev,
             x: node.x(),
             y: node.y(),
@@ -130,7 +110,7 @@ export default function MemeImage ({
         }}
         onTransform={(e) => {
           const node = e.target
-          setImageProps({
+          setImageInfo({
             x: node.x(),
             y: node.y(),
             width: node.width() * node.scaleX(),
@@ -142,10 +122,9 @@ export default function MemeImage ({
       />
       {isSelected && (
         <ImageTransformer
-          image={image}
           ref={trRef}
-          deleteButtonPosition={deleteButtonPosition}
-          moveToTopButtonPosition={moveToTopButtonPosition}
+          image={image}
+          imageInfo={imageInfo}
           onDelete={onDelete}
           moveToTop={moveToTop}
         />
@@ -157,18 +136,44 @@ export default function MemeImage ({
 function ImageTransformer ({
   image,
   ref,
-  deleteButtonPosition,
-  moveToTopButtonPosition,
+  imageInfo,
   onDelete,
   moveToTop,
 }: {
   image: EditorImage
   ref: RefObject<any>
-  deleteButtonPosition: { x: number, y: number }
-  moveToTopButtonPosition: { x: number, y: number }
+  imageInfo: ImageInfo
   onDelete?: (id: string) => void
   moveToTop?: (id: string) => void
 }) {
+  const deleteButtonPosition = useMemo(() => {
+    const rad = (imageInfo.rotation * Math.PI) / 180
+    const dx = imageInfo.width * Math.cos(rad)
+    const dy = imageInfo.width * Math.sin(rad)
+
+    return {
+      x: imageInfo.x + dx,
+      y: imageInfo.y + dy,
+    }
+  }, [imageInfo])
+
+  const moveToTopButtonPosition = useMemo(() => {
+    const rad = (imageInfo.rotation * Math.PI) / 180
+
+    // 이미지의 왼쪽 하단 좌표를 회전 변환
+    const dx = 0
+    const dy = imageInfo.height
+
+    // 회전된 좌표 계산
+    const rotatedX = dx * Math.cos(rad) - dy * Math.sin(rad)
+    const rotatedY = dx * Math.sin(rad) + dy * Math.cos(rad)
+
+    return {
+      x: imageInfo.x + rotatedX,
+      y: imageInfo.y + rotatedY,
+    }
+  }, [imageInfo])
+
   return (
     <>
       <Transformer
