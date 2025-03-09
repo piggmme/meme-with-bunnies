@@ -9,19 +9,35 @@ export default function GiphySearch () {
 
   return (
     <div>
-      <input
-        type='text'
-        value={query}
-        onChange={e => setQuery(e.target.value)}
-        placeholder='Search for GIFs'
-      />
-      <button onClick={async () => {
-        if (!query) return
-        const results = await fetchGifs({ query })
-        if (results) setGifs(results)
-      }}
-      >Search
-      </button>
+      <div>
+        {njzs.map(njz => (
+          <button
+            key={njz.name}
+            onClick={async () => {
+              const results = await fetchGifs({ query: njz.name })
+              if (results) setGifs(results)
+            }}
+          >{njz.emoji}
+          </button>
+        ))}
+      </div>
+
+      <div>
+        <input
+          type='text'
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder='Search for GIFs'
+        />
+        <button onClick={async () => {
+          if (!query) return
+          const results = await fetchGifs({ query })
+          if (results) setGifs(results)
+        }}
+        >Search
+        </button>
+      </div>
+
       <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '20px' }}>
         {gifs.map(gif => (
           <img
@@ -49,3 +65,26 @@ export default function GiphySearch () {
     </div>
   )
 }
+
+const njzs = [
+  {
+    name: 'bear',
+    emoji: '🐻',
+  },
+  {
+    name: 'otter',
+    emoji: '🦦',
+  },
+  {
+    name: 'cat',
+    emoji: '🐱',
+  },
+  {
+    name: 'dog',
+    emoji: '🐶',
+  },
+  {
+    name: 'hamster',
+    emoji: '🐹',
+  },
+]
