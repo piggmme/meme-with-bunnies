@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import 'gifler'
 import type { EditorImage } from '../types/Editor'
+import { getImageSize } from '@/utils/editor'
 
 export function useImageUpload (onUpload: (image: EditorImage) => void) {
   const [src, setSrc] = useState<string | null>(null)
@@ -29,10 +30,7 @@ export function useImageUpload (onUpload: (image: EditorImage) => void) {
           id: String(Date.now()),
           src,
           image: img,
-          size: {
-            width: img.width / 2,
-            height: img.height / 2,
-          },
+          size: getImageSize({ width: img.width, height: img.height }),
         })
         setSrc(null)
         setType(null)

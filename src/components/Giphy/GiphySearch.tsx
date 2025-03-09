@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { fetchGifs } from '@/service/giphy'
 import type { GiphyGif } from '@/types/giphy'
 import { $editorImages } from '@/stores/editorState'
+import { getImageSize } from '@/utils/editor'
 
 export default function GiphySearch () {
   const [query, setQuery] = useState('')
@@ -52,10 +53,10 @@ export default function GiphySearch () {
                   type: 'gif',
                   id: gif.id,
                   src: gif.images.original.url,
-                  size: {
+                  size: getImageSize({
                     width: Number(gif.images.original.width),
                     height: Number(gif.images.original.height),
-                  },
+                  }),
                 },
               ])
             }}

@@ -8,6 +8,7 @@ import MemeImage from './tools/MemeImage'
 import useSelectImage from './hooks/useSelectImage'
 import { useStore } from '@nanostores/react'
 import { $editorImages } from '@/stores/editorState'
+import { editorSize } from '@/constants/editor'
 
 export default function Editor () {
   const editorImages = useStore($editorImages)
@@ -16,8 +17,6 @@ export default function Editor () {
   const { selectedId, selectImage, deselectImage } = useSelectImage()
   const [isDownloading, setIsDownloading] = useState(false)
   const [bgColor, setBgColor] = useState('#ffffff') // 배경색 상태 추가
-
-  const size = Math.min(window.innerWidth - 20, 500)
 
   const handleMoveToTop = (id: string) => {
     const imageIndex = editorImages.findIndex(img => img.id === id)
@@ -32,15 +31,15 @@ export default function Editor () {
     <div style={{ padding: 10 }}>
       <div style={{ border: '1px solid black', display: 'inline-block' }}>
         <Stage
-          width={size}
-          height={size}
+          width={editorSize}
+          height={editorSize}
           ref={stageRef}
           onClick={deselectImage}
         >
           <Layer ref={layerRef}>
             <Rect
-              width={size}
-              height={size}
+              width={editorSize}
+              height={editorSize}
               fill={bgColor}
             />
             {
