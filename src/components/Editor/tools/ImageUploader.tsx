@@ -11,6 +11,13 @@ export default function ImageUploader ({
   const { handleImageUpload } = useImageUpload(addImage)
 
   return (
-    <input type='file' accept='image/*' onChange={handleImageUpload} />
+    <input
+      type='file'
+      accept='image/*'
+      onChange={(e) => {
+        handleImageUpload(e)
+        e.target.value = ''
+      }}
+    />
   )
 }
