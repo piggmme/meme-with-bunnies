@@ -173,48 +173,22 @@ export default function MemeImage ({
           <Group
             x={deleteButtonPosition.x}
             y={deleteButtonPosition.y}
-            onMouseEnter={(e) => {
-              const container = e.target.getStage()?.container()
-              if (container) {
-                container.style.cursor = 'pointer'
-              }
-            }}
-            onMouseLeave={(e) => {
-              const container = e.target.getStage()?.container()
-              if (container) {
-                container.style.cursor = 'default'
-              }
-            }}
           >
             <Circle
               radius={deleteButtonSize / 2}
               fill='#FF4444'
               onClick={() => onDelete?.(image.id)}
-              listening={true}
             />
             <DeleteIcon />
           </Group>
           <Group
             x={moveToTopButtonPosition.x}
             y={moveToTopButtonPosition.y}
-            onMouseEnter={(e) => {
-              const container = e.target.getStage()?.container()
-              if (container) {
-                container.style.cursor = 'pointer'
-              }
-            }}
-            onMouseLeave={(e) => {
-              const container = e.target.getStage()?.container()
-              if (container) {
-                container.style.cursor = 'default'
-              }
-            }}
           >
             <Circle
               radius={deleteButtonSize / 2}
               fill='#77c477'
               onClick={() => moveToTop?.(image.id)}
-              listening={true}
             />
             <MoveToTopIcon />
           </Group>
