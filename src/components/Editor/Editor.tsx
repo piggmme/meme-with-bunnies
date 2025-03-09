@@ -41,6 +41,7 @@ export default function Editor () {
                   image={image}
                   isSelected={image.id === selectedId}
                   onSelect={selectImage}
+                  onDelete={id => $editorImages.set(editorImages.filter(image => image.id !== id))}
                 />
               ))
             }
