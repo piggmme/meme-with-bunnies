@@ -111,7 +111,7 @@ export const downloadPng = (konvaStage: KonvaStage | null, name = RESULT_NAME) =
 }
 
 type MemeType = 'gif' | 'video'
-export const downloadGif = async (konvaLayer: KonvaLayer | null, type: MemeType = 'video', name = RESULT_NAME) => {
+export const downloadGif = async (konvaLayer: KonvaLayer | null, type: MemeType = 'gif', name = RESULT_NAME) => {
   if (!konvaLayer) return
 
   try {
