@@ -11,6 +11,7 @@ interface MemeImageProps {
   isSelected?: boolean
   onSelect: (id: string) => void
   onDelete?: (id: string) => void
+  moveToTop?: (id: string) => void // 추가
 }
 
 export default function MemeImage ({
@@ -19,6 +20,7 @@ export default function MemeImage ({
   isSelected = false,
   onSelect,
   onDelete,
+  moveToTop,
 }: MemeImageProps) {
   const trRef = useRef<any>(null)
   const imageRef = useRef<KonvaImage>(null)
@@ -78,9 +80,24 @@ export default function MemeImage ({
       strokeWidth={2}
       strokeLinecap='round'
       strokeLinejoin='round'
-      // SVG viewBox를 Konva 좌표로 변환
       offsetX={12}
       offsetY={12}
+      scaleX={0.7}
+      scaleY={0.7}
+    />
+  )
+
+  const MoveToTopIcon = () => (
+    <Path
+      data='M12 4L4 12M12 4L20 12M12 4V20'
+      stroke='#ffffff'
+      strokeWidth={2}
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      offsetX={12}
+      offsetY={12}
+      scaleX={0.7}
+      scaleY={0.7}
     />
   )
 
@@ -94,6 +111,11 @@ export default function MemeImage ({
       y: imageProps.y + dy,
     }
   }, [imageProps])
+
+  const moveToTopButtonPosition = useMemo(() => ({
+    x: imageProps.x,
+    y: imageProps.y + imageProps.height,
+  }), [imageProps])
 
   return (
     <>
@@ -171,6 +193,30 @@ export default function MemeImage ({
               listening={true}
             />
             <DeleteIcon />
+          </Group>
+          <Group
+            x={moveToTopButtonPosition.x}
+            y={moveToTopButtonPosition.y}
+            onMouseEnter={(e) => {
+              const container = e.target.getStage()?.container()
+              if (container) {
+                container.style.cursor = 'pointer'
+              }
+            }}
+            onMouseLeave={(e) => {
+              const container = e.target.getStage()?.container()
+              if (container) {
+                container.style.cursor = 'default'
+              }
+            }}
+          >
+            <Circle
+              radius={deleteButtonSize / 2}
+              fill='#77c477'
+              onClick={() => moveToTop?.(image.id)}
+              listening={true}
+            />
+            <MoveToTopIcon />
           </Group>
         </>
       )}

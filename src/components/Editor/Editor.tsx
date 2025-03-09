@@ -19,6 +19,15 @@ export default function Editor () {
 
   const size = Math.min(window.innerWidth - 20, 500)
 
+  const handleMoveToTop = (id: string) => {
+    const imageIndex = editorImages.findIndex(img => img.id === id)
+    if (imageIndex !== editorImages.length - 1) {
+      const newImages = editorImages.filter(img => img.id !== id)
+      newImages.push(editorImages[imageIndex])
+      $editorImages.set(newImages)
+    }
+  }
+
   return (
     <div style={{ padding: 10 }}>
       <div style={{ border: '1px solid black', display: 'inline-block' }}>
@@ -42,6 +51,7 @@ export default function Editor () {
                   isSelected={image.id === selectedId}
                   onSelect={selectImage}
                   onDelete={id => $editorImages.set(editorImages.filter(image => image.id !== id))}
+                  moveToTop={handleMoveToTop}
                 />
               ))
             }
