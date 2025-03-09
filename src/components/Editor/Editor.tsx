@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { Stage, Layer } from 'react-konva'
+import { Stage, Layer, Rect } from 'react-konva'
 import ImageUploader from './tools/ImageUploader'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Layer as KonvaLayer } from 'konva/lib/Layer'
@@ -15,6 +15,7 @@ export default function Editor () {
   const layerRef = useRef<KonvaLayer>(null)
   const { selectedId, selectImage, deselectImage } = useSelectImage()
   const [isDownloading, setIsDownloading] = useState(false)
+  const [bgColor, setBgColor] = useState('#ffffff') // 배경색 상태 추가
 
   const size = Math.min(window.innerWidth - 20, 500)
 
@@ -28,6 +29,11 @@ export default function Editor () {
           onClick={deselectImage}
         >
           <Layer ref={layerRef}>
+            <Rect
+              width={size}
+              height={size}
+              fill={bgColor}
+            />
             {
               editorImages.map(image => (
                 <MemeImage
@@ -43,6 +49,16 @@ export default function Editor () {
       </div>
 
       <div>
+        <div style={{ marginBottom: 10 }}>
+          <label>
+            배경색:
+            <input
+              type='color'
+              value={bgColor}
+              onChange={e => setBgColor(e.target.value)}
+            />
+          </label>
+        </div>
         <ImageUploader addImage={image => $editorImages.set([...editorImages, image])} />
         <button onClick={async () => {
           deselectImage()
