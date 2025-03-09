@@ -112,10 +112,22 @@ export default function MemeImage ({
     }
   }, [imageProps])
 
-  const moveToTopButtonPosition = useMemo(() => ({
-    x: imageProps.x,
-    y: imageProps.y + imageProps.height,
-  }), [imageProps])
+  const moveToTopButtonPosition = useMemo(() => {
+    const rad = (imageProps.rotation * Math.PI) / 180
+
+    // 이미지의 왼쪽 하단 좌표를 회전 변환
+    const dx = 0
+    const dy = imageProps.height
+
+    // 회전된 좌표 계산
+    const rotatedX = dx * Math.cos(rad) - dy * Math.sin(rad)
+    const rotatedY = dx * Math.sin(rad) + dy * Math.cos(rad)
+
+    return {
+      x: imageProps.x + rotatedX,
+      y: imageProps.y + rotatedY,
+    }
+  }, [imageProps])
 
   return (
     <>
