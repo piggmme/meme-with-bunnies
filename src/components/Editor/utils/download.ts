@@ -8,44 +8,62 @@ import wasmURL from '@ffmpeg/core/wasm?url'
 const RESULT_NAME = 'njz-meme'
 const RECORDING_TIME = 5000
 
-async function convertWebmToGif (webmBlob: Blob): Promise<Blob> {
+async function convertVideoToGif (videoBlob: Blob): Promise<Blob> {
   const ffmpeg = new FFmpeg()
-
-  // ffmpeg 초기화
   await ffmpeg.load({ coreURL, wasmURL })
 
-  // WebM 파일을 ffmpeg에 쓰기
-  await ffmpeg.writeFile('input.webm', await fetchFile(webmBlob))
+  // 입력 파일 확장자를 MIME 타입에 따라 설정
+  const inputExt = videoBlob.type.includes('webm') ? 'webm' : 'mp4'
+  const inputFile = `input.${inputExt}`
 
-  // WebM을 GIF로 변환
+  // 파일 쓰기
+  await ffmpeg.writeFile(inputFile, await fetchFile(videoBlob))
+
+  // 비디오를 GIF로 변환
   await ffmpeg.exec([
     '-i',
-    'input.webm',
+    inputFile,
     '-vf',
     [
-      'fps=30', // 프레임 레이트 증가
-      'scale=720:-1:flags=lanczos', // 해상도 증가, lanczos 스케일링
+      'fps=30',
+      'scale=720:-1:flags=lanczos',
       'split[s0][s1]',
-      '[s0]palettegen=stats_mode=diff[p]', // 향상된 팔레트 생성
-      '[s1][p]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle', // 디더링 개선
+      '[s0]palettegen=stats_mode=diff[p]',
+      '[s1][p]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle',
     ].join(','),
     '-loop',
-    '0', // 무한 반복
+    '0',
     'output.gif',
   ])
 
-  // 변환된 GIF 파일 읽기
   const data = await ffmpeg.readFile('output.gif')
-
   return new Blob([data], { type: 'image/gif' })
+}
+
+const getMimeType = () => {
+  // Safari와 다른 브라우저 지원을 위한 MIME 타입 확인
+  let mimeType = 'video/mp4'
+
+  // WebM 지원 확인
+  if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+    mimeType = 'video/webm;codecs=vp9'
+  } else if (MediaRecorder.isTypeSupported('video/webm')) {
+    mimeType = 'video/webm'
+  }
+
+  return mimeType
 }
 
 function startRecording (konvaLayer: KonvaLayer): Promise<Blob> {
   return new Promise((resolve) => {
     const chunks: Blob[] = []
     const stream = konvaLayer.getNativeCanvasElement().captureStream(30)
+
+    const mimeType = getMimeType()
+
     const rec = new MediaRecorder(stream, {
-      mimeType: 'video/webm;codecs=vp9',
+      mimeType,
+      videoBitsPerSecond: 5000000, // 비트레이트 설정
     })
 
     rec.ondataavailable = (e) => {
@@ -55,7 +73,7 @@ function startRecording (konvaLayer: KonvaLayer): Promise<Blob> {
     }
 
     rec.onstop = () => {
-      const blob = new Blob(chunks, { type: 'video/webm' })
+      const blob = new Blob(chunks, { type: mimeType })
       resolve(blob)
     }
 
@@ -93,14 +111,22 @@ export const downloadPng = (konvaStage: KonvaStage | null, name = RESULT_NAME) =
 }
 
 type MemeType = 'gif' | 'video'
-export const downloadGif = async (konvaLayer: KonvaLayer | null, type: MemeType = 'gif', name = RESULT_NAME) => {
+export const downloadGif = async (konvaLayer: KonvaLayer | null, type: MemeType = 'video', name = RESULT_NAME) => {
   if (!konvaLayer) return
-  const webmBlob = await startRecording(konvaLayer)
 
-  if (type === 'video') {
-    exportVid(webmBlob, name.replace('.webm', '.mp4'))
-  } else if (type === 'gif') {
-    const gifBlob = await convertWebmToGif(webmBlob)
-    exportVid(gifBlob, name.replace('.webm', '.gif'))
+  try {
+    const videoBlob = await startRecording(konvaLayer)
+
+    if (type === 'video') {
+      exportVid(videoBlob, name)
+    } else if (type === 'gif') {
+      const gifBlob = await convertVideoToGif(videoBlob)
+      exportVid(gifBlob, name)
+    }
+  } catch (error) {
+    console.error('다운로드 중 오류 발생:', error)
+    throw error
+  } finally {
+    console.log('끝!!')
   }
 }
