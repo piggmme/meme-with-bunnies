@@ -3,7 +3,9 @@ import {
 } from 'react-konva'
 import type { EditorImage } from '../types/Editor'
 import { Image as KonvaImage } from 'konva/lib/shapes/Image'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  useEffect, useMemo, useRef, useState, type RefObject,
+} from 'react'
 
 interface MemeImageProps {
   image: EditorImage
@@ -13,6 +15,8 @@ interface MemeImageProps {
   onDelete?: (id: string) => void
   moveToTop?: (id: string) => void // 추가
 }
+
+const CONTROL_BUTTON_SIZE = 24
 
 export default function MemeImage ({
   image,
@@ -71,35 +75,6 @@ export default function MemeImage ({
       trRef.current.getLayer().batchDraw()
     }
   }, [isSelected, trRef.current])
-
-  const deleteButtonSize = 24
-  const DeleteIcon = () => (
-    <Path
-      data='M18 6L6 18M6 6l12 12'
-      stroke='#ffffff'
-      strokeWidth={2}
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      offsetX={12}
-      offsetY={12}
-      scaleX={0.7}
-      scaleY={0.7}
-    />
-  )
-
-  const MoveToTopIcon = () => (
-    <Path
-      data='M12 4L4 12M12 4L20 12M12 4V20'
-      stroke='#ffffff'
-      strokeWidth={2}
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      offsetX={12}
-      offsetY={12}
-      scaleX={0.7}
-      scaleY={0.7}
-    />
-  )
 
   const deleteButtonPosition = useMemo(() => {
     const rad = (imageProps.rotation * Math.PI) / 180
@@ -166,46 +141,124 @@ export default function MemeImage ({
         ref={imageRef}
       />
       {isSelected && (
-        <>
-          <Transformer
-            ref={trRef}
-            enabledAnchors={['bottom-right']}
-            boundBoxFunc={(oldBox, newBox) => {
-              // 최소 크기 제한
-              const minSize = 20
-              const isToSmall = Math.abs(newBox.width) < minSize || Math.abs(newBox.height) < minSize
-              return isToSmall ? oldBox : newBox
-            }}
-            borderDash={[6, 2]}
-            borderStroke='#4482ff'
-            anchorCornerRadius={10}
-            anchorStroke='#4482ff'
-            anchorFill='#ccddff'
-          />
-          <Group
-            x={deleteButtonPosition.x}
-            y={deleteButtonPosition.y}
-          >
-            <Circle
-              radius={deleteButtonSize / 2}
-              fill='#FF4444'
-              onClick={() => onDelete?.(image.id)}
-            />
-            <DeleteIcon />
-          </Group>
-          <Group
-            x={moveToTopButtonPosition.x}
-            y={moveToTopButtonPosition.y}
-          >
-            <Circle
-              radius={deleteButtonSize / 2}
-              fill='#77c477'
-              onClick={() => moveToTop?.(image.id)}
-            />
-            <MoveToTopIcon />
-          </Group>
-        </>
+        <ImageTransformer
+          image={image}
+          ref={trRef}
+          deleteButtonPosition={deleteButtonPosition}
+          moveToTopButtonPosition={moveToTopButtonPosition}
+          onDelete={onDelete}
+          moveToTop={moveToTop}
+        />
       )}
     </>
+  )
+}
+
+function ImageTransformer ({
+  image,
+  ref,
+  deleteButtonPosition,
+  moveToTopButtonPosition,
+  onDelete,
+  moveToTop,
+}: {
+  image: EditorImage
+  ref: RefObject<any>
+  deleteButtonPosition: { x: number, y: number }
+  moveToTopButtonPosition: { x: number, y: number }
+  onDelete?: (id: string) => void
+  moveToTop?: (id: string) => void
+}) {
+  return (
+    <>
+      <Transformer
+        ref={ref}
+        enabledAnchors={['bottom-right']}
+        boundBoxFunc={(oldBox, newBox) => {
+          const minSize = 20
+          const isToSmall = Math.abs(newBox.width) < minSize || Math.abs(newBox.height) < minSize
+          return isToSmall ? oldBox : newBox
+        }}
+        borderDash={[6, 2]}
+        borderStroke='#4482ff'
+        anchorCornerRadius={10}
+        anchorStroke='#4482ff'
+        anchorFill='#ccddff'
+      />
+      <ControlButton
+        x={deleteButtonPosition.x}
+        y={deleteButtonPosition.y}
+        fill='#FF4444'
+        onControl={() => onDelete?.(image.id)}
+      >
+        <DeleteIcon />
+      </ControlButton>
+
+      <ControlButton
+        x={moveToTopButtonPosition.x}
+        y={moveToTopButtonPosition.y}
+        fill='#77c477'
+        onControl={() => moveToTop?.(image.id)}
+      >
+        <MoveToTopIcon />
+      </ControlButton>
+    </>
+  )
+}
+
+function ControlButton ({
+  x,
+  y,
+  fill,
+  onControl,
+  children,
+}: {
+  x: number
+  y: number
+  fill: string
+  onControl: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <Group x={x} y={y}>
+      <Circle
+        radius={CONTROL_BUTTON_SIZE / 2}
+        fill={fill}
+        onClick={onControl}
+      />
+      {children}
+    </Group>
+  )
+}
+
+function DeleteIcon () {
+  return (
+    <Path
+      data='M18 6L6 18M6 6l12 12'
+      stroke='#ffffff'
+      strokeWidth={2}
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      offsetX={12}
+      offsetY={12}
+      scaleX={0.7}
+      scaleY={0.7}
+    />
+  )
+}
+
+function MoveToTopIcon () {
+  return (
+    <Path
+      data='M12 4L4 12M12 4L20 12M12 4V20'
+      stroke='#ffffff'
+      strokeWidth={2}
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      offsetX={12}
+      offsetY={12}
+      scaleX={0.7}
+      scaleY={0.7}
+    />
   )
 }
