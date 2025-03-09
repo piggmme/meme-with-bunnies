@@ -13,6 +13,7 @@ export default function Editor () {
   const stageRef = useRef<KonvaStage>(null)
   const layerRef = useRef<KonvaLayer>(null)
   const { selectedId, selectImage, deselectImage } = useSelectImage()
+  const [isDownloading, setIsDownloading] = useState(false)
 
   const size = Math.min(window.innerWidth - 20, 500)
 
@@ -42,14 +43,17 @@ export default function Editor () {
 
       <div>
         <ImageUploader addImage={image => setImages([...images, image])} />
-        <button onClick={() => {
+        <button onClick={async () => {
           deselectImage()
+          setIsDownloading(true)
           const hasGif = images.some(({ type }) => type === 'gif')
-          if (hasGif) downloadGif(layerRef.current)
+          if (hasGif) await downloadGif(layerRef.current)
           else downloadPng(stageRef.current)
+          setIsDownloading(false)
         }}
         >밈 저장하기
         </button>
+        {isDownloading && <div>다운로드 중...</div>}
       </div>
     </div>
   )
