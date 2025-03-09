@@ -230,6 +230,7 @@ function ControlButton ({
         radius={CONTROL_BUTTON_SIZE / 2}
         fill={fill}
         onClick={onControl}
+        onTouchEnd={onControl}
       />
       {children}
     </Group>
