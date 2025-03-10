@@ -75,7 +75,7 @@ export default function Editor () {
           setIsDownloading(true)
           const hasGif = editorImages.some(({ type }) => type === 'gif')
           if (hasGif) await downloadGif(layerRef.current)
-          else downloadPng(stageRef.current)
+          else await downloadPng(stageRef.current)
           setIsDownloading(false)
         }}
         >밈 저장하기

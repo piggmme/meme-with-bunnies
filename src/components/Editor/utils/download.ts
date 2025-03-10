@@ -85,7 +85,36 @@ function startRecording (konvaLayer: KonvaLayer): Promise<Blob> {
   })
 }
 
-function exportFile (url: string, name = RESULT_NAME) {
+const isMobile = () => {
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+}
+
+async function exportFileMobile (url: string, name = RESULT_NAME) {
+  try {
+    // Blob으로 변환
+    const response = await fetch(url)
+    const blob = await response.blob()
+
+    if (!navigator.canShare) {
+      console.log(`Your browser doesn't support the Web Share API.`)
+      return
+    }
+
+    // 파일 공유 API 사용
+    const file = new File([blob], name, { type: blob.type })
+    if (navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: '밈 저장하기',
+      })
+      return
+    }
+  } catch (error) {
+    console.error('공유 중 오류 발생:', error)
+  }
+}
+
+function exportFileDesktop (url: string, name = RESULT_NAME) {
   const link = document.createElement('a')
   link.href = url
   link.download = name
@@ -94,20 +123,29 @@ function exportFile (url: string, name = RESULT_NAME) {
   document.body.removeChild(link)
 }
 
-function exportVid (blob: Blob, name = RESULT_NAME) {
+async function exportFile (url: string, name = RESULT_NAME) {
+  if (isMobile()) {
+    console.log('isMobile', navigator.userAgent)
+    await exportFileMobile(url, name)
+  } else {
+    exportFileDesktop(url, name)
+  }
+}
+
+async function exportVid (blob: Blob, name = RESULT_NAME) {
   const url = URL.createObjectURL(blob)
-  exportFile(url, name)
+  await exportFile(url, name)
   URL.revokeObjectURL(url)
 }
 
-function exportPng (konvaStage: KonvaStage, name = RESULT_NAME) {
+async function exportPng (konvaStage: KonvaStage, name = RESULT_NAME) {
   const url = konvaStage.toDataURL({ pixelRatio: 2 })
-  exportFile(url, name)
+  await exportFile(url, name)
 }
 
-export const downloadPng = (konvaStage: KonvaStage | null, name = RESULT_NAME) => {
+export const downloadPng = async (konvaStage: KonvaStage | null, name = RESULT_NAME) => {
   if (!konvaStage) return
-  exportPng(konvaStage, name)
+  await exportPng(konvaStage, name)
 }
 
 type MemeType = 'gif' | 'video'
@@ -118,10 +156,10 @@ export const downloadGif = async (konvaLayer: KonvaLayer | null, type: MemeType 
     const videoBlob = await startRecording(konvaLayer)
 
     if (type === 'video') {
-      exportVid(videoBlob, name)
+      await exportVid(videoBlob, name)
     } else if (type === 'gif') {
       const gifBlob = await convertVideoToGif(videoBlob)
-      exportVid(gifBlob, name)
+      await exportVid(gifBlob, name)
     }
   } catch (error) {
     console.error('다운로드 중 오류 발생:', error)
