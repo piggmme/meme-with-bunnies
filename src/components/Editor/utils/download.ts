@@ -1,16 +1,20 @@
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Layer as KonvaLayer } from 'konva/lib/Layer'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
-import { fetchFile } from '@ffmpeg/util'
-import coreURL from '@ffmpeg/core?url'
-import wasmURL from '@ffmpeg/core/wasm?url'
+import { fetchFile, toBlobURL } from '@ffmpeg/util'
 
 const RESULT_NAME = 'njz-meme'
 const RECORDING_TIME = 5000
 
+const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm'
+
 async function convertVideoToGif (videoBlob: Blob): Promise<Blob> {
   const ffmpeg = new FFmpeg()
-  await ffmpeg.load({ coreURL, wasmURL })
+
+  await ffmpeg.load({
+    coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+    wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+  })
 
   // 입력 파일 확장자를 MIME 타입에 따라 설정
   const inputExt = videoBlob.type.includes('webm') ? 'webm' : 'mp4'
@@ -161,10 +165,9 @@ export const downloadGif = async (konvaLayer: KonvaLayer | null, type: MemeType 
       const gifBlob = await convertVideoToGif(videoBlob)
       await exportVid(gifBlob, name)
     }
+    console.log('끝!!')
   } catch (error) {
     console.error('다운로드 중 오류 발생:', error)
     throw error
-  } finally {
-    console.log('끝!!')
   }
 }

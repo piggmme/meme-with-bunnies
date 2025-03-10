@@ -74,9 +74,14 @@ export default function Editor () {
           deselectImage()
           setIsDownloading(true)
           const hasGif = editorImages.some(({ type }) => type === 'gif')
-          if (hasGif) await downloadGif(layerRef.current)
-          else await downloadPng(stageRef.current)
-          setIsDownloading(false)
+          try {
+            if (hasGif) await downloadGif(layerRef.current)
+            else await downloadPng(stageRef.current)
+          } catch {
+            alert('다운로드에 실패했습니다. 다시 시도해주세요.')
+          } finally {
+            setIsDownloading(false)
+          }
         }}
         >밈 저장하기
         </button>
