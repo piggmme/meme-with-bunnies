@@ -84,6 +84,9 @@ importers:
       typescript-eslint:
         specifier: ^8.26.0
         version: 8.26.0(eslint@9.21.0)(typescript@5.8.2)
+      wrangler:
+        specifier: ^3.112.0
+        version: 3.112.0(@cloudflare/workers-types@4.20250303.0)
 
 packages:
 
