@@ -1,12 +1,18 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { fetchGifs } from '@/service/giphy'
 import type { GiphyGif } from '@/types/giphy'
 import { $editorImages } from '@/stores/editorState'
 import { getImageSize } from '@/utils/editor'
 
 export default function GiphySearch () {
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState('bear')
   const [gifs, setGifs] = useState<GiphyGif[]>([])
+
+  useEffect(() => {
+    fetchGifs({ query }).then((results) => {
+      if (results) setGifs(results)
+    })
+  }, [query])
 
   return (
     <div>
@@ -14,9 +20,8 @@ export default function GiphySearch () {
         {njzs.map(njz => (
           <button
             key={njz.name}
-            onClick={async () => {
-              const results = await fetchGifs({ query: njz.name })
-              if (results) setGifs(results)
+            onClick={() => {
+              setQuery(njz.name)
             }}
           >{njz.emoji}
           </button>
@@ -30,10 +35,8 @@ export default function GiphySearch () {
           onChange={e => setQuery(e.target.value)}
           placeholder='Search for GIFs'
         />
-        <button onClick={async () => {
-          if (!query) return
-          const results = await fetchGifs({ query })
-          if (results) setGifs(results)
+        <button onClick={() => {
+          setQuery(query)
         }}
         >Search
         </button>

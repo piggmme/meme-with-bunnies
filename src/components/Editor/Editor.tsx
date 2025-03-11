@@ -28,7 +28,7 @@ export default function Editor () {
   }
 
   return (
-    <div style={{ padding: 10 }}>
+    <div>
       <div style={{ border: '1px solid black', display: 'inline-block' }}>
         <Stage
           width={editorSize}

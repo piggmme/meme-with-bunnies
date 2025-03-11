@@ -13,16 +13,42 @@ import Editor from '../components/Editor/Editor'
   </head>
   <body>
     <h1>Meme With Bunnies</h1>
-    <Editor client:only='react' />
-    <GiphySearch client:only='react' />
+    <main>
+      <section>
+        <Editor client:only='react' />
+      </section>
+      <section>
+        <GiphySearch client:only='react' />
+      </section>
+    </main>
   </body>
 </html>
 
 <style lang='scss'>
- h1 {
-    text-align: center;
-    margin-top: 2rem;
+  body {
+    padding: 10px;
+    min-height: 100vh;
+    background-color: #f2f4f7;
+  }
+  h1 {
     font-weight: 800;
     font-size: 1.3rem;
- }
+    padding: 10px 0;
+  }
+
+  main {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: start;
+
+    section {
+      min-width: 500px; // section의 최소 너비 설정
+      max-width: 500px;;
+      border: 1px solid #ddd;
+      background-color: #fff;
+      padding: 18px 15px;
+      border-radius: 8px;
+    }
+  }
 </style>
