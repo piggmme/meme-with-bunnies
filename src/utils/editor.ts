@@ -1,14 +1,13 @@
-import { editorSize } from '@/constants/editor'
-
-const maxSize = editorSize / 2
-const minSize = editorSize / 4
+import { $canvasSize } from '@/stores/editorState'
 
 export const getImageSize = (image: { width: number, height: number }) => {
+  const canvasWidth = $canvasSize.get().width
+  const maxSize = canvasWidth / 2
+  const minSize = canvasWidth / 4
+
   const ratio = image.width / image.height
   const width = Math.min(maxSize, Math.max(minSize, image.width))
   const height = width / ratio
-
-  console.log(image, minSize, width, height)
 
   return { width, height }
 }

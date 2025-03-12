@@ -2,6 +2,15 @@ import type { EditorImage } from '@/components/Editor/types/Editor'
 import { useStore } from '@nanostores/react'
 import { atom } from 'nanostores'
 
+interface CanvasSize {
+  width: number
+  height: number
+}
+
+export const $canvasSize = atom<CanvasSize>({
+  width: Math.min(window.innerWidth - 20, 500),
+  height: Math.min(window.innerWidth - 20, 500),
+})
 export const $editorImages = atom<EditorImage[]>([])
 export const $editorBackground = atom<string>('#ffffff')
 export const $isDownloading = atom<boolean>(false)

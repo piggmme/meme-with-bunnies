@@ -3,15 +3,34 @@ import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Layer as KonvaLayer } from 'konva/lib/Layer'
 import EditorController from './EditorController'
 import { EditorCanvas } from './EditorCanvas'
+import {
+  Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger,
+} from '../ui/sheet'
+import { useStore } from '@nanostores/react'
+import { $canvasSize } from '@/stores/editorState'
+import GiphySearch from '../Giphy/GiphySearch'
 
 export default function Editor () {
   const stageRef = useRef<KonvaStage>(null)
   const layerRef = useRef<KonvaLayer>(null)
+  const canvasSize = useStore($canvasSize)
+
+  const sheetHeight = Math.max(window.innerHeight - canvasSize.height, window.innerHeight * 0.4)
 
   return (
-    <div>
+    <>
       <EditorCanvas stageRef={stageRef} layerRef={layerRef} />
-      <EditorController stageRef={stageRef} layerRef={layerRef} />
-    </div>
+
+      <Sheet>
+        <SheetTrigger>Open</SheetTrigger>
+        <SheetContent side='bottom' style={{ height: `${sheetHeight}px` }}>
+          <SheetTitle>짤을 꾸며보세용</SheetTitle>
+          <SheetDescription>
+            <EditorController stageRef={stageRef} layerRef={layerRef} />
+            <GiphySearch />
+          </SheetDescription>
+        </SheetContent>
+      </Sheet>
+    </>
   )
 }
