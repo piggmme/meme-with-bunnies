@@ -75,9 +75,19 @@ export default function Editor () {
           setIsDownloading(true)
           const hasGif = editorImages.some(({ type }) => type === 'gif')
           try {
-            if (hasGif) await downloadGif(layerRef.current)
-            else await downloadPng(stageRef.current)
-          } catch {
+            let shareData: ShareData | null | undefined = null
+            if (hasGif) {
+              shareData = await downloadGif(layerRef.current)
+            } else {
+              shareData = await downloadPng(stageRef.current)
+            }
+
+            if (shareData && navigator.canShare(shareData)) {
+              // navigator.share()는 사용자가 직접 클릭한 이벤트 안에서 실행해야 함
+              await navigator.share(shareData)
+            }
+          } catch (e) {
+            console.error('다운로드 중 오류 발생!!:', e)
             alert('다운로드에 실패했습니다. 다시 시도해주세요.')
           } finally {
             setIsDownloading(false)

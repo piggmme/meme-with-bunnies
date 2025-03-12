@@ -106,13 +106,13 @@ async function exportFileMobile (url: string, name = RESULT_NAME) {
 
     // 파일 공유 API 사용
     const file = new File([blob], name, { type: blob.type })
-    if (navigator.canShare({ files: [file] })) {
-      await navigator.share({
-        files: [file],
-        title: '밈 저장하기',
-      })
-      return
+    const shareData: ShareData = {
+      files: [file],
+      title: '밈 저장하기',
+      text: name,
+      url: window.location.href,
     }
+    return shareData
   } catch (error) {
     console.error('공유 중 오류 발생:', error)
   }
@@ -129,27 +129,31 @@ function exportFileDesktop (url: string, name = RESULT_NAME) {
 
 async function exportFile (url: string, name = RESULT_NAME) {
   if (isMobile()) {
-    console.log('isMobile', navigator.userAgent)
-    await exportFileMobile(url, name)
+    const shareData = await exportFileMobile(url, name)
+    return shareData
   } else {
     exportFileDesktop(url, name)
+    return null
   }
 }
 
 async function exportVid (blob: Blob, name = RESULT_NAME) {
   const url = URL.createObjectURL(blob)
-  await exportFile(url, name)
-  URL.revokeObjectURL(url)
+  const shareData = await exportFile(url, name)
+  // URL.revokeObjectURL(url)
+  return shareData
 }
 
 async function exportPng (konvaStage: KonvaStage, name = RESULT_NAME) {
   const url = konvaStage.toDataURL({ pixelRatio: 2 })
-  await exportFile(url, name)
+  const shareData = await exportFile(url, name)
+  return shareData
 }
 
 export const downloadPng = async (konvaStage: KonvaStage | null, name = RESULT_NAME) => {
   if (!konvaStage) return
-  await exportPng(konvaStage, name)
+  const shareData = await exportPng(konvaStage, name)
+  return shareData
 }
 
 type MemeType = 'gif' | 'video'
@@ -160,12 +164,14 @@ export const downloadGif = async (konvaLayer: KonvaLayer | null, type: MemeType 
     const videoBlob = await startRecording(konvaLayer)
 
     if (type === 'video') {
-      await exportVid(videoBlob, name)
+      const shareData = await exportVid(videoBlob, name)
+      return shareData
     } else if (type === 'gif') {
       const gifBlob = await convertVideoToGif(videoBlob)
-      await exportVid(gifBlob, name)
+      const shareData = await exportVid(gifBlob, name)
+      console.log('GIF 파일 생성 완료:', shareData)
+      return shareData
     }
-    console.log('끝!!')
   } catch (error) {
     console.error('다운로드 중 오류 발생:', error)
     throw error
