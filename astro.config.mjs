@@ -1,6 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config'
-
+import tailwindcss from '@tailwindcss/vite'
 import react from '@astrojs/react'
 import cloudflare from '@astrojs/cloudflare'
 
@@ -10,6 +10,7 @@ export default defineConfig({
   output: 'server',
   adapter: cloudflare(),
   vite: {
+    plugins: [tailwindcss()],
     resolve: {
       // Use react-dom/server.edge instead of react-dom/server.browser for React 19.
       // Without this, MessageChannel from node:worker_threads needs to be polyfilled.
@@ -26,13 +27,6 @@ export default defineConfig({
       headers: {
         'Cross-Origin-Embedder-Policy': 'require-corp',
         'Cross-Origin-Opener-Policy': 'same-origin',
-      },
-    },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: `@use "./global.scss" as *;`,
-        },
       },
     },
   },
