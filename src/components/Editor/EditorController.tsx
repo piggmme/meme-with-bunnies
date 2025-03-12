@@ -1,4 +1,4 @@
-import { $editorBackground, $editorImages, $isDownloading } from '@/stores/editorState'
+import { $editorBackground, $editorImages, $isDownloading, useSelectImage } from '@/stores/editorState'
 import { useStore } from '@nanostores/react'
 import ImageUploader from './tools/ImageUploader'
 import { downloadGif, downloadPng } from './utils/download'
@@ -8,15 +8,14 @@ import { Layer as KonvaLayer } from 'konva/lib/Layer'
 export default function EditorController ({
   stageRef,
   layerRef,
-  deselectImage,
 }: {
   stageRef: React.RefObject<KonvaStage | null>
   layerRef: React.RefObject<KonvaLayer | null>
-  deselectImage: () => void
 }) {
   const editorImages = useStore($editorImages)
   const isDownloading = useStore($isDownloading)
   const editorBackground = useStore($editorBackground)
+  const { deselectImage } = useSelectImage()
 
   return (
     <div>
