@@ -20,7 +20,6 @@ export function EditorCanvas ({
   const editorBackground = useStore($editorBackground)
   const { selectedId, selectImage, deselectImage } = useSelectImage()
   const canvasSize = useStore($canvasSize)
-  const canvasClientSize = useStore($canvasClientSize)
 
   const handleMoveToTop = (id: string) => {
     const imageIndex = editorImages.findIndex(img => img.id === id)
@@ -65,7 +64,7 @@ export function EditorCanvas ({
         width: `${canvasSize.width}px`,
         height: `${canvasSize.height}px`,
       }}
-      className='border border-gray-500 rounded-md flex p-2 items-center justify-center box-content'
+      className='border border-gray-300 flex items-center justify-center box-content'
     >
       <Layer ref={layerRef}>
         <Rect
