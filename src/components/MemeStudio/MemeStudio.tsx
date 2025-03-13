@@ -7,13 +7,13 @@ import {
 } from '../ui/sheet'
 import { useStore } from '@nanostores/react'
 import { $canvasClientSize } from '@/stores/canvasState'
-import GiphySearch from '../Giphy/GiphySearch'
 import BackgroundController from '../MemeController/BackgroundController'
 import ImageUploadController from '../MemeController/ImageUploadController'
 import { Button } from '../ui/button'
 import SaveController from '../MemeController/SaveController'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import ResetController from '../MemeController/ResetController'
+import GiphyList from '../Giphy/GiphyList'
 
 export default function MemeStudio () {
   const stageRef = useRef<KonvaStage>(null)
@@ -22,15 +22,19 @@ export default function MemeStudio () {
 
   const sheetHeight = Math.max(window.innerHeight - canvasClientSize.height, window.innerHeight * 0.4)
 
-  const scrollCanvasTop = (open: boolean) => {
+  const scrollToCanvas = (open: boolean) => {
     if (open) {
       const container = stageRef.current?.container()
       if (!container) return
 
-      // 부드러운 스크롤 효과로 캔버스 상단으로 이동
       container.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
+      })
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
       })
     }
   }
@@ -39,19 +43,18 @@ export default function MemeStudio () {
     <>
       <EditorCanvas stageRef={stageRef} layerRef={layerRef} />
 
-      <Sheet onOpenChange={scrollCanvasTop}>
+      <Sheet onOpenChange={scrollToCanvas}>
         <SheetTrigger>
           <Button>GIPHY</Button>
         </SheetTrigger>
         <SheetContent side='bottom' style={{ height: `${sheetHeight}px` }}>
-          <DialogTitle>GIPHY</DialogTitle>
           <SheetDescription>
-            <GiphySearch />
+            <GiphyList height={sheetHeight} />
           </SheetDescription>
         </SheetContent>
       </Sheet>
 
-      <Sheet onOpenChange={scrollCanvasTop}>
+      <Sheet onOpenChange={scrollToCanvas}>
         <SheetTrigger>
           <Button>배경색</Button>
         </SheetTrigger>
@@ -63,7 +66,7 @@ export default function MemeStudio () {
         </SheetContent>
       </Sheet>
 
-      <Sheet onOpenChange={scrollCanvasTop}>
+      <Sheet onOpenChange={scrollToCanvas}>
         <SheetTrigger>
           <Button>이미지 업로드</Button>
         </SheetTrigger>
