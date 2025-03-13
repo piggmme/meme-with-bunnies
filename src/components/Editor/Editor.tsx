@@ -6,51 +6,68 @@ import {
   Sheet, SheetContent, SheetDescription, SheetTrigger,
 } from '../ui/sheet'
 import { useStore } from '@nanostores/react'
-import { $canvasPosition } from '@/stores/editorState'
+import { $canvasClientSize } from '@/stores/editorState'
 import GiphySearch from '../Giphy/GiphySearch'
 import BackgroundController from '../Controller/BackgroundController'
 import ImageUploadController from '../Controller/ImageUploadController'
 import { Button } from '../ui/button'
 import SaveController from '../Controller/SaveController'
+import { DialogTitle } from '@radix-ui/react-dialog'
 
 export default function Editor () {
   const stageRef = useRef<KonvaStage>(null)
   const layerRef = useRef<KonvaLayer>(null)
-  const canvasPosition = useStore($canvasPosition)
+  const canvasClientSize = useStore($canvasClientSize)
 
-  const sheetHeight = Math.max(window.innerHeight - canvasPosition.y, window.innerHeight * 0.4)
+  const sheetHeight = Math.max(window.innerHeight - canvasClientSize.height, window.innerHeight * 0.4)
+
+  const scrollCanvasTop = (open: boolean) => {
+    if (open) {
+      const container = stageRef.current?.container()
+      if (!container) return
+
+      // 부드러운 스크롤 효과로 캔버스 상단으로 이동
+      container.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }
 
   return (
     <>
       <EditorCanvas stageRef={stageRef} layerRef={layerRef} />
 
-      <Sheet>
+      <Sheet onOpenChange={scrollCanvasTop}>
         <SheetTrigger>
           <Button>GIPHY</Button>
         </SheetTrigger>
         <SheetContent side='bottom' style={{ height: `${sheetHeight}px` }}>
+          <DialogTitle>GIPHY</DialogTitle>
           <SheetDescription>
             <GiphySearch />
           </SheetDescription>
         </SheetContent>
       </Sheet>
 
-      <Sheet>
+      <Sheet onOpenChange={scrollCanvasTop}>
         <SheetTrigger>
           <Button>배경색</Button>
         </SheetTrigger>
         <SheetContent side='bottom' style={{ height: `${sheetHeight}px` }}>
+          <DialogTitle>배경색</DialogTitle>
           <SheetDescription>
             <BackgroundController />
           </SheetDescription>
         </SheetContent>
       </Sheet>
 
-      <Sheet>
+      <Sheet onOpenChange={scrollCanvasTop}>
         <SheetTrigger>
           <Button>이미지 업로드</Button>
         </SheetTrigger>
         <SheetContent side='bottom' style={{ height: `${sheetHeight}px` }}>
+          <DialogTitle>이미지</DialogTitle>
           <SheetDescription>
             <ImageUploadController />
           </SheetDescription>

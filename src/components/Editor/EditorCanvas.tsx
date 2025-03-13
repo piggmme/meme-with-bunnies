@@ -4,6 +4,7 @@ import { Layer as KonvaLayer } from 'konva/lib/Layer'
 import MemeImage from './tools/MemeImage'
 import { useStore } from '@nanostores/react'
 import {
+  $canvasClientSize,
   $canvasPosition, $canvasSize, $editorBackground, $editorImages, useSelectImage,
 } from '@/stores/editorState'
 import { useEffect } from 'react'
@@ -19,6 +20,7 @@ export function EditorCanvas ({
   const editorBackground = useStore($editorBackground)
   const { selectedId, selectImage, deselectImage } = useSelectImage()
   const canvasSize = useStore($canvasSize)
+  const canvasClientSize = useStore($canvasClientSize)
 
   const handleMoveToTop = (id: string) => {
     const imageIndex = editorImages.findIndex(img => img.id === id)
@@ -40,6 +42,8 @@ export function EditorCanvas ({
         x: rect.left,
         y: rect.top + rect.height,
       }
+
+      $canvasClientSize.set({ width: rect.width, height: rect.height })
       $canvasPosition.set(bottomLeft)
     }
 
