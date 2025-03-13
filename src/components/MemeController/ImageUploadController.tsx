@@ -1,11 +1,11 @@
 import { $editorImages } from '@/stores/editorState'
 import { useStore } from '@nanostores/react'
 import { useImageUpload } from '@/hooks/useImageUpload'
-import type { EditorImage } from '@/types/Editor'
+import type { MemeImage } from '@/types/canvas'
 
 export default function ImageUploadController () {
   const editorImages = useStore($editorImages)
-  const addImage = (image: EditorImage) => $editorImages.set([...editorImages, image])
+  const addImage = (image: MemeImage) => $editorImages.set([...editorImages, image])
   const { handleImageUpload } = useImageUpload(addImage)
 
   return (

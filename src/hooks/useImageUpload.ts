@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import 'gifler'
-import type { EditorImage } from '../types/Editor'
+import type { MemeImage } from '../types/canvas'
 import { getImageSize } from '@/utils/editor'
 
-export function useImageUpload (onUpload: (image: EditorImage) => void) {
+export function useImageUpload (onUpload: (image: MemeImage) => void) {
   const [src, setSrc] = useState<string | null>(null)
   const [type, setType] = useState<'gif' | 'image' | null>(null)
 

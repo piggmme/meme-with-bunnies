@@ -1,9 +1,9 @@
-export type EditorImage = GifImage | MemeImage
+export type MemeImage = GifImage | PngImage
 export interface GifImage extends ImageType {
   type: 'gif'
 }
 
-export interface MemeImage extends ImageType {
+export interface PngImage extends ImageType {
   type: 'image'
   image: HTMLImageElement
 }

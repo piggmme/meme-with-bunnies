@@ -1,14 +1,14 @@
 import {
   Image, Transformer, Circle, Group, Path, type KonvaNodeEvents,
 } from 'react-konva'
-import type { EditorImage } from '@/types/Editor'
+import type { MemeImage } from '@/types/canvas'
 import { Image as KonvaImage } from 'konva/lib/shapes/Image'
 import {
   useEffect, useMemo, useRef, useState, type RefObject,
 } from 'react'
 
 interface MemeImageProps {
-  image: EditorImage
+  image: MemeImage
   onClick?: KonvaNodeEvents['onClick']
   isSelected?: boolean
   onSelect: (id: string) => void
@@ -140,7 +140,7 @@ function ImageTransformer ({
   onDelete,
   moveToTop,
 }: {
-  image: EditorImage
+  image: MemeImage
   ref: RefObject<any>
   imageInfo: ImageInfo
   onDelete?: (id: string) => void

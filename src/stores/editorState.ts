@@ -1,4 +1,4 @@
-import type { EditorImage } from '@/types/Editor'
+import type { MemeImage } from '@/types/canvas'
 import { useStore } from '@nanostores/react'
 import { atom } from 'nanostores'
 
@@ -15,7 +15,7 @@ export const $canvasSize = atom<CanvasSize>({
   width: Math.min(window.innerWidth - CANVAS_PADDING, 500),
   height: Math.min(window.innerWidth - CANVAS_PADDING, 500),
 })
-export const $editorImages = atom<EditorImage[]>([])
+export const $editorImages = atom<MemeImage[]>([])
 export const $editorBackground = atom<string>('#ffffff')
 export const $isDownloading = atom<boolean>(false)
 export const $editorSelectedId = atom<string | null>(null)
