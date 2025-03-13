@@ -7,15 +7,15 @@ import {
   Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger,
 } from '../ui/sheet'
 import { useStore } from '@nanostores/react'
-import { $canvasSize } from '@/stores/editorState'
+import { $canvasPosition } from '@/stores/editorState'
 import GiphySearch from '../Giphy/GiphySearch'
 
 export default function Editor () {
   const stageRef = useRef<KonvaStage>(null)
   const layerRef = useRef<KonvaLayer>(null)
-  const canvasSize = useStore($canvasSize)
+  const canvasPosition = useStore($canvasPosition)
 
-  const sheetHeight = Math.max(window.innerHeight - canvasSize.height, window.innerHeight * 0.4)
+  const sheetHeight = Math.max(window.innerHeight - canvasPosition.y, window.innerHeight * 0.4)
 
   return (
     <>

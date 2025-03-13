@@ -3,7 +3,10 @@ import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Layer as KonvaLayer } from 'konva/lib/Layer'
 import MemeImage from './tools/MemeImage'
 import { useStore } from '@nanostores/react'
-import { $canvasSize, $editorBackground, $editorImages, useSelectImage } from '@/stores/editorState'
+import {
+  $canvasPosition, $canvasSize, $editorBackground, $editorImages, useSelectImage,
+} from '@/stores/editorState'
+import { useEffect } from 'react'
 
 export function EditorCanvas ({
   stageRef,
@@ -25,6 +28,28 @@ export function EditorCanvas ({
       $editorImages.set(newImages)
     }
   }
+
+  useEffect(() => {
+    const updatePosition = () => {
+      const container = stageRef.current?.container()
+      if (!container) return
+
+      const rect = container.getBoundingClientRect()
+      // 왼쪽 하단 좌표 계산
+      const bottomLeft = {
+        x: rect.left,
+        y: rect.top + rect.height,
+      }
+      $canvasPosition.set(bottomLeft)
+    }
+
+    // 초기 위치 설정
+    updatePosition()
+
+    // 리사이즈 이벤트에서도 위치 업데이트
+    window.addEventListener('resize', updatePosition)
+    return () => window.removeEventListener('resize', updatePosition)
+  }, [stageRef.current])
 
   return (
     <Stage

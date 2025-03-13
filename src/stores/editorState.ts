@@ -7,6 +7,8 @@ interface CanvasSize {
   height: number
 }
 
+// 왼쪽 하단 꼭지점의 위치
+export const $canvasPosition = atom<{ x: number, y: number }>({ x: 0, y: 0 })
 export const $canvasSize = atom<CanvasSize>({
   width: Math.min(window.innerWidth - 20, 500),
   height: Math.min(window.innerWidth - 20, 500),
