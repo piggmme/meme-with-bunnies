@@ -13,6 +13,7 @@ import ImageUploadController from '../Controller/ImageUploadController'
 import { Button } from '../ui/button'
 import SaveController from '../Controller/SaveController'
 import { DialogTitle } from '@radix-ui/react-dialog'
+import ResetController from '../Controller/ResetController'
 
 export default function Editor () {
   const stageRef = useRef<KonvaStage>(null)
@@ -75,6 +76,8 @@ export default function Editor () {
       </Sheet>
 
       <SaveController stageRef={stageRef} layerRef={layerRef} />
+
+      <ResetController />
     </>
   )
 }
