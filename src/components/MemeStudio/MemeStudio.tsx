@@ -1,21 +1,21 @@
 import { useRef } from 'react'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Layer as KonvaLayer } from 'konva/lib/Layer'
-import { EditorCanvas } from './EditorCanvas'
+import { EditorCanvas } from '../MemeCanvas/MemeCanvas'
 import {
   Sheet, SheetContent, SheetDescription, SheetTrigger,
 } from '../ui/sheet'
 import { useStore } from '@nanostores/react'
 import { $canvasClientSize } from '@/stores/editorState'
 import GiphySearch from '../Giphy/GiphySearch'
-import BackgroundController from '../Controller/BackgroundController'
-import ImageUploadController from '../Controller/ImageUploadController'
+import BackgroundController from '../MemeController/BackgroundController'
+import ImageUploadController from '../MemeController/ImageUploadController'
 import { Button } from '../ui/button'
-import SaveController from '../Controller/SaveController'
+import SaveController from '../MemeController/SaveController'
 import { DialogTitle } from '@radix-ui/react-dialog'
-import ResetController from '../Controller/ResetController'
+import ResetController from '../MemeController/ResetController'
 
-export default function Editor () {
+export default function MemeStudio () {
   const stageRef = useRef<KonvaStage>(null)
   const layerRef = useRef<KonvaLayer>(null)
   const canvasClientSize = useStore($canvasClientSize)

@@ -1,7 +1,7 @@
 import { Stage, Layer, Rect } from 'react-konva'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Layer as KonvaLayer } from 'konva/lib/Layer'
-import MemeImage from './tools/MemeImage'
+import MemeImage from './MemeImage'
 import { useStore } from '@nanostores/react'
 import {
   $canvasClientSize,

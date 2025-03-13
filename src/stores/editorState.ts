@@ -1,4 +1,4 @@
-import type { EditorImage } from '@/components/Editor/types/Editor'
+import type { EditorImage } from '@/types/Editor'
 import { useStore } from '@nanostores/react'
 import { atom } from 'nanostores'
 
