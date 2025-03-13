@@ -54,7 +54,7 @@ export default function GiphySearch () {
                 ...$canvasImages.get(),
                 {
                   type: 'gif',
-                  id: gif.id,
+                  id: gif.id + String(Date.now()),
                   src: gif.images.original.url,
                   size: getImageSize({
                     width: Number(gif.images.original.width),
