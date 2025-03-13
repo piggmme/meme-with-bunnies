@@ -1,4 +1,4 @@
-import type { MemeImage } from '@/types/canvas'
+import type { CanvasImage } from '@/types/canvas'
 import { useStore } from '@nanostores/react'
 import { atom } from 'nanostores'
 
@@ -15,31 +15,31 @@ export const $canvasSize = atom<CanvasSize>({
   width: Math.min(window.innerWidth - CANVAS_PADDING, 500),
   height: Math.min(window.innerWidth - CANVAS_PADDING, 500),
 })
-export const $editorImages = atom<MemeImage[]>([])
-export const $editorBackground = atom<string>('#ffffff')
+export const $canvasImages = atom<CanvasImage[]>([])
+export const $canvasBackground = atom<string>('#ffffff')
 export const $isDownloading = atom<boolean>(false)
-export const $editorSelectedId = atom<string | null>(null)
+export const $canvasSelectedId = atom<string | null>(null)
 
 export function useSelectImage () {
-  const editorSelectedId = useStore($editorSelectedId)
+  const canvasSelectedId = useStore($canvasSelectedId)
 
   const selectImage = (id: string) => {
-    $editorSelectedId.set(id)
+    $canvasSelectedId.set(id)
   }
 
   const deselectImage = () => {
-    $editorSelectedId.set(null)
+    $canvasSelectedId.set(null)
   }
 
   return {
-    selectedId: editorSelectedId,
+    selectedId: canvasSelectedId,
     selectImage,
     deselectImage,
   }
 }
 
-export function resetEditorState () {
-  $editorImages.set([])
-  $editorBackground.set('#ffffff')
-  $editorSelectedId.set(null)
+export function resetCanvasState () {
+  $canvasImages.set([])
+  $canvasBackground.set('#ffffff')
+  $canvasSelectedId.set(null)
 }

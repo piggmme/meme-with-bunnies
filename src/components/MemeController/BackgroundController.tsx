@@ -1,8 +1,8 @@
-import { $editorBackground } from '@/stores/editorState'
+import { $canvasBackground } from '@/stores/canvasState'
 import { useStore } from '@nanostores/react'
 
 export default function BackgroundController () {
-  const editorBackground = useStore($editorBackground)
+  const canvasBackground = useStore($canvasBackground)
 
   return (
     <div style={{ marginBottom: 10 }}>
@@ -10,8 +10,8 @@ export default function BackgroundController () {
         배경색:
         <input
           type='color'
-          value={editorBackground}
-          onChange={e => $editorBackground.set(e.target.value)}
+          value={canvasBackground}
+          onChange={e => $canvasBackground.set(e.target.value)}
         />
       </label>
     </div>

@@ -1,4 +1,4 @@
-import { $editorImages, $isDownloading, useSelectImage } from '@/stores/editorState'
+import { $canvasImages, $isDownloading, useSelectImage } from '@/stores/canvasState'
 import { useStore } from '@nanostores/react'
 import { downloadGif, downloadPng } from '@/utils/download'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
@@ -12,7 +12,7 @@ export default function SaveController ({
   stageRef: React.RefObject<KonvaStage | null>
   layerRef: React.RefObject<KonvaLayer | null>
 }) {
-  const editorImages = useStore($editorImages)
+  const canvasImages = useStore($canvasImages)
   const isDownloading = useStore($isDownloading)
   const { deselectImage } = useSelectImage()
 
@@ -21,7 +21,7 @@ export default function SaveController ({
       <Button onClick={async () => {
         deselectImage()
         $isDownloading.set(true)
-        const hasGif = editorImages.some(({ type }) => type === 'gif')
+        const hasGif = canvasImages.some(({ type }) => type === 'gif')
         try {
           let shareData: ShareData | null | undefined = null
           if (hasGif) {

@@ -1,4 +1,4 @@
-import { $canvasSize } from '@/stores/editorState'
+import { $canvasSize } from '@/stores/canvasState'
 
 export const getImageSize = (image: { width: number, height: number }) => {
   const canvasWidth = $canvasSize.get().width

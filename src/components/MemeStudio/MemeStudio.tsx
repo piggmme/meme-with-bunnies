@@ -6,7 +6,7 @@ import {
   Sheet, SheetContent, SheetDescription, SheetTrigger,
 } from '../ui/sheet'
 import { useStore } from '@nanostores/react'
-import { $canvasClientSize } from '@/stores/editorState'
+import { $canvasClientSize } from '@/stores/canvasState'
 import GiphySearch from '../Giphy/GiphySearch'
 import BackgroundController from '../MemeController/BackgroundController'
 import ImageUploadController from '../MemeController/ImageUploadController'

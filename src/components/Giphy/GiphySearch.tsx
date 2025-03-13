@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { fetchGifs } from '@/service/giphy'
 import type { GiphyGif } from '@/types/giphy'
-import { $editorImages } from '@/stores/editorState'
+import { $canvasImages } from '@/stores/canvasState'
 import { getImageSize } from '@/utils/editor'
 
 export default function GiphySearch () {
@@ -50,8 +50,8 @@ export default function GiphySearch () {
             alt={gif.title}
             style={{ width: '150px', margin: '5px' }}
             onClick={() => {
-              $editorImages.set([
-                ...$editorImages.get(),
+              $canvasImages.set([
+                ...$canvasImages.get(),
                 {
                   type: 'gif',
                   id: gif.id,

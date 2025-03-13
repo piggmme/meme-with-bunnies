@@ -1,4 +1,4 @@
-export type MemeImage = GifImage | PngImage
+export type CanvasImage = GifImage | PngImage
 export interface GifImage extends ImageType {
   type: 'gif'
 }
