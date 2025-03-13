@@ -22,6 +22,15 @@ export default function Editor () {
       <EditorCanvas stageRef={stageRef} layerRef={layerRef} />
 
       <Sheet>
+        <SheetTrigger>배경색</SheetTrigger>
+        <SheetContent side='bottom' style={{ height: `${sheetHeight}px` }}>
+          <SheetDescription>
+            <EditorController stageRef={stageRef} layerRef={layerRef} />
+          </SheetDescription>
+        </SheetContent>
+      </Sheet>
+
+      <Sheet>
         <SheetTrigger>Open</SheetTrigger>
         <SheetContent side='bottom' style={{ height: `${sheetHeight}px` }}>
           <SheetTitle>짤을 꾸며보세용</SheetTitle>
