@@ -9,14 +9,16 @@ import SaveController from './SaveController'
 import ResetController from './ResetController'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Layer as KonvaLayer } from 'konva/lib/Layer'
-import { useStore } from '@nanostores/react'
-import { $canvasClientSize } from '@/stores/canvasState'
+import { useRef } from 'react'
 
-export default function MemeController ({ stageRef, layerRef }: {
+const DEFAULT_SHEET_HEIGHT = window.innerHeight * 0.4
+
+export default function MemeController ({ stageRef, layerRef, studioRefHeight }: {
   stageRef: React.RefObject<KonvaStage | null>
   layerRef: React.RefObject<KonvaLayer | null>
+  studioRefHeight: number
 }) {
-  const canvasClientSize = useStore($canvasClientSize)
+  const controllers = useRef<HTMLDivElement>(null)
 
   const scrollToCanvas = (open: boolean) => {
     if (open) {
@@ -35,10 +37,10 @@ export default function MemeController ({ stageRef, layerRef }: {
     }
   }
 
-  const sheetHeight = Math.max(window.innerHeight - canvasClientSize.height, window.innerHeight * 0.4)
+  const sheetHeight = Math.max(window.innerHeight - studioRefHeight - 10, DEFAULT_SHEET_HEIGHT)
 
   return (
-    <section>
+    <div ref={controllers}>
       <Sheet onOpenChange={scrollToCanvas}>
         <SheetTrigger>
           <Button>GIPHY</Button>
@@ -77,7 +79,6 @@ export default function MemeController ({ stageRef, layerRef }: {
       <SaveController stageRef={stageRef} layerRef={layerRef} />
 
       <ResetController />
-
-    </section>
+    </div>
   )
 }
