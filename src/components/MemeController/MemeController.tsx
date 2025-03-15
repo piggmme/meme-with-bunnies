@@ -45,7 +45,7 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
 
   return (
     <div ref={controllers}>
-      <Drawer scrollCallback={scrollToCanvas}>
+      <Drawer modal={false} onOpenChange={scrollToCanvas}>
         <DrawerTrigger>
           <Button>GIPHY</Button>
         </DrawerTrigger>
@@ -57,7 +57,7 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
         </DrawerContent>
       </Drawer>
 
-      <Drawer scrollCallback={scrollToCanvas}>
+      <Drawer onOpenChange={scrollToCanvas}>
         <DrawerTrigger>
           <Button>배경색</Button>
         </DrawerTrigger>
@@ -69,7 +69,7 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
         </DrawerContent>
       </Drawer>
 
-      <Drawer scrollCallback={scrollToCanvas}>
+      <Drawer onOpenChange={scrollToCanvas}>
         <DrawerTrigger>
           <Button>이미지 업로드</Button>
         </DrawerTrigger>

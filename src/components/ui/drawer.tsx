@@ -4,22 +4,11 @@ import { Drawer as DrawerPrimitive } from 'vaul'
 import { cn } from '@/lib/utils'
 
 function Drawer ({
-  scrollCallback,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Root> & { scrollCallback?: (open: boolean) => void }) {
-  const [open, setOpen] = React.useState(false)
-  const onOpenChange = (open: boolean) => {
-    scrollCallback?.(open)
-    setTimeout(() => {
-      setOpen(true)
-    }, 300)
-  }
+}: React.ComponentProps<typeof DrawerPrimitive.Root>) {
   return (
     <DrawerPrimitive.Root
       data-slot='drawer'
-      modal={false}
-      onOpenChange={onOpenChange}
-      open={open}
       {...props}
     />
   )
