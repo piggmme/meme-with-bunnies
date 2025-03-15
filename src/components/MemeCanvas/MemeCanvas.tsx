@@ -9,7 +9,7 @@ import {
 } from '@/stores/canvasState'
 import { useEffect } from 'react'
 
-export function EditorCanvas ({
+export default function MemeCanvas ({
   stageRef,
   layerRef,
 }: {
