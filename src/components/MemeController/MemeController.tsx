@@ -55,7 +55,7 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
         scrollToCanvas={scrollToCanvas}
         sheetHeight={sheetHeight}
       >
-        <GiphyList height={sheetHeight} />
+        <GiphyList />
       </ControllerDrawer>
 
       <ControllerDrawer
