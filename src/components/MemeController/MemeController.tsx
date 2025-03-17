@@ -17,12 +17,15 @@ import {
 
 const DEFAULT_SHEET_HEIGHT = window.innerHeight * 0.4
 
+type ControllerType = 'giphy' | 'background' | 'image'
+
 export default function MemeController ({ stageRef, layerRef, studioRefHeight }: {
   stageRef: React.RefObject<KonvaStage | null>
   layerRef: React.RefObject<KonvaLayer | null>
   studioRefHeight: number
 }) {
   const controllers = useRef<HTMLDivElement>(null)
+  const [openedController, setOpenedController] = useState<ControllerType | null>(null)
 
   const scrollToCanvas = (open: boolean) => {
     if (open) {
@@ -45,15 +48,33 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
 
   return (
     <div ref={controllers}>
-      <ControllerDrawer modal={false} title='GIPHY' scrollToCanvas={scrollToCanvas} sheetHeight={sheetHeight}>
+      <ControllerDrawer
+        title='GIPHY'
+        open={openedController === 'giphy'}
+        setOpen={(open: boolean) => setOpenedController(open ? 'giphy' : null)}
+        scrollToCanvas={scrollToCanvas}
+        sheetHeight={sheetHeight}
+      >
         <GiphyList height={sheetHeight} />
       </ControllerDrawer>
 
-      <ControllerDrawer title='배경색' scrollToCanvas={scrollToCanvas} sheetHeight={sheetHeight}>
+      <ControllerDrawer
+        title='배경색'
+        open={openedController === 'background'}
+        setOpen={(open: boolean) => setOpenedController(open ? 'background' : null)}
+        scrollToCanvas={scrollToCanvas}
+        sheetHeight={sheetHeight}
+      >
         <BackgroundController />
       </ControllerDrawer>
 
-      <ControllerDrawer title='이미지' scrollToCanvas={scrollToCanvas} sheetHeight={sheetHeight}>
+      <ControllerDrawer
+        title='이미지'
+        open={openedController === 'image'}
+        setOpen={(open: boolean) => setOpenedController(open ? 'image' : null)}
+        scrollToCanvas={scrollToCanvas}
+        sheetHeight={sheetHeight}
+      >
         <ImageUploadController />
       </ControllerDrawer>
 
@@ -65,22 +86,30 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
 }
 
 function ControllerDrawer ({
-  title, modal = true, children, scrollToCanvas, sheetHeight,
+  title,
+  open,
+  setOpen,
+  modal = false,
+  children,
+  scrollToCanvas,
+  sheetHeight,
 }:
 {
   title: string
+  open: boolean
+  setOpen: (open: boolean) => void
   children: React.ReactNode
   scrollToCanvas: (open: boolean) => void
   sheetHeight: number
   modal?: boolean
 }) {
-  const [open, setOpen] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   return (
     <>
       <Button onClick={() => {
         scrollToCanvas(!open)
+        // fix: 컨트롤러 클릭시 캔버스 상단까지 스크롤 안하는 버그 때문에 우회하여 모달 trigger 클릭 처리
         setTimeout(() => buttonRef.current?.click(), 300)
       }}
       >
