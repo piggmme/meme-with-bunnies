@@ -3,14 +3,9 @@ import { fetchGifs } from '@/service/giphy'
 import type { GiphyGif } from '@/types/giphy'
 import { $canvasImages } from '@/stores/canvasState'
 import { getImageSize } from '@/utils/editor'
-import { ScrollArea } from '../ui/scroll-area'
 import { Button } from '../ui/button'
 
-export default function GiphyList ({
-  height,
-}: {
-  height: number
-}) {
+export default function GiphyList () {
   const [query, setQuery] = useState('bear')
   const [gifs, setGifs] = useState<GiphyGif[]>([])
 
@@ -21,7 +16,7 @@ export default function GiphyList ({
   }, [query])
 
   return (
-    <ScrollArea style={{ height }}>
+    <div style={{ overflow: 'scroll', overscrollBehavior: 'contain' }}>
       <div className='sticky top-0 left-0 z-50 flex gap-2 p-2 bg-background'>
         {njzs.map(njz => (
           <Button
@@ -63,7 +58,7 @@ export default function GiphyList ({
         ))}
       </ul>
 
-    </ScrollArea>
+    </div>
   )
 }
 
