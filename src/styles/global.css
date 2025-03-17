@@ -4,6 +4,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+* {
+  user-select: none; /* 모든 요소 선택 방지 */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Edge */
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
