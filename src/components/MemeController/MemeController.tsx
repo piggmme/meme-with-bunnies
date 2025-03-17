@@ -6,7 +6,7 @@ import SaveController from './SaveController'
 import ResetController from './ResetController'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Layer as KonvaLayer } from 'konva/lib/Layer'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Drawer,
   DrawerContent,
@@ -14,8 +14,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
-
-const DEFAULT_SHEET_HEIGHT = window.innerHeight * 0.4
+import { resetCanvasRatio, updateCanvasRatio } from '@/stores/canvasState'
 
 type ControllerType = 'giphy' | 'background' | 'image'
 
@@ -26,6 +25,15 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
 }) {
   const controllers = useRef<HTMLDivElement>(null)
   const [openedController, setOpenedController] = useState<ControllerType | null>(null)
+
+  useEffect(() => {
+    if (openedController === 'giphy') {
+      updateCanvasRatio(window.innerHeight * 0.4)
+    }
+    if (openedController === null) {
+      resetCanvasRatio()
+    }
+  }, [openedController])
 
   const scrollToCanvas = (open: boolean) => {
     if (open) {
@@ -43,8 +51,8 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
       })
     }
   }
-
-  const sheetHeight = Math.max(window.innerHeight - studioRefHeight - 10, DEFAULT_SHEET_HEIGHT)
+  const controllerHeight = controllers.current?.getBoundingClientRect().height ?? 0
+  const sheetHeight = window.innerHeight - studioRefHeight - 10
 
   return (
     <div ref={controllers}>
@@ -53,7 +61,7 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
         open={openedController === 'giphy'}
         setOpen={(open: boolean) => setOpenedController(open ? 'giphy' : null)}
         scrollToCanvas={scrollToCanvas}
-        sheetHeight={sheetHeight}
+        sheetHeight={window.innerHeight * 0.6 - controllerHeight}
       >
         <GiphyList />
       </ControllerDrawer>

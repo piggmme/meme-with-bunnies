@@ -5,7 +5,9 @@ import MemeImage from './MemeImage'
 import { useStore } from '@nanostores/react'
 import {
   $canvasClientSize,
-  $canvasPosition, $canvasSize, $canvasBackground, $canvasImages, useSelectImage,
+  $canvasPosition, $canvasBackground, $canvasImages, useSelectImage,
+  $canvasRatio,
+  CANVAS_SIZE,
 } from '@/stores/canvasState'
 import { useEffect } from 'react'
 
@@ -19,7 +21,7 @@ export default function MemeCanvas ({
   const canvasImages = useStore($canvasImages)
   const canvasBackground = useStore($canvasBackground)
   const { selectedId, selectImage, deselectImage } = useSelectImage()
-  const canvasSize = useStore($canvasSize)
+  const canvasRatio = useStore($canvasRatio)
 
   const handleMoveToTop = (id: string) => {
     const imageIndex = canvasImages.findIndex(img => img.id === id)
@@ -54,25 +56,23 @@ export default function MemeCanvas ({
     return () => window.removeEventListener('resize', updatePosition)
   }, [stageRef.current])
 
-  const ratio = Math.min(window.innerWidth, canvasSize.width) / canvasSize.width
-
   return (
     <Stage
-      width={canvasSize.width * ratio}
-      height={canvasSize.height * ratio}
+      width={CANVAS_SIZE * canvasRatio}
+      height={CANVAS_SIZE * canvasRatio}
       ref={stageRef}
       onClick={deselectImage}
-      scale={{ x: ratio, y: ratio }}
+      scale={{ x: canvasRatio, y: canvasRatio }}
       style={{
-        width: `${canvasSize.width * ratio}px`,
-        height: `${canvasSize.height * ratio}px`,
+        width: `${CANVAS_SIZE * canvasRatio}px`,
+        height: `${CANVAS_SIZE * canvasRatio}px`,
       }}
       className='border border-gray-300 flex items-center justify-center box-content'
     >
       <Layer ref={layerRef}>
         <Rect
-          width={500}
-          height={500}
+          width={CANVAS_SIZE}
+          height={CANVAS_SIZE}
           fill={canvasBackground}
         />
         {
