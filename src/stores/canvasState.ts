@@ -12,8 +12,8 @@ const CANVAS_PADDING = 0
 export const $canvasPosition = atom<{ x: number, y: number }>({ x: 0, y: 0 })
 export const $canvasClientSize = atom<{ width: number, height: number }>({ width: 0, height: 0 })
 export const $canvasSize = atom<CanvasSize>({
-  width: Math.min(window.innerWidth - CANVAS_PADDING, 500),
-  height: Math.min(window.innerWidth - CANVAS_PADDING, 500),
+  width: 500,
+  height: 500,
 })
 export const $canvasImages = atom<CanvasImage[]>([])
 export const $canvasBackground = atom<string>('#ffffff')

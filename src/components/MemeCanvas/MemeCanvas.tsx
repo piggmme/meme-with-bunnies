@@ -54,22 +54,25 @@ export default function MemeCanvas ({
     return () => window.removeEventListener('resize', updatePosition)
   }, [stageRef.current])
 
+  const ratio = Math.min(window.innerWidth, canvasSize.width) / canvasSize.width
+
   return (
     <Stage
-      width={canvasSize.width}
-      height={canvasSize.height}
+      width={canvasSize.width * ratio}
+      height={canvasSize.height * ratio}
       ref={stageRef}
       onClick={deselectImage}
+      scale={{ x: ratio, y: ratio }}
       style={{
-        width: `${canvasSize.width}px`,
-        height: `${canvasSize.height}px`,
+        width: `${canvasSize.width * ratio}px`,
+        height: `${canvasSize.height * ratio}px`,
       }}
       className='border border-gray-300 flex items-center justify-center box-content'
     >
       <Layer ref={layerRef}>
         <Rect
-          width={canvasSize.width}
-          height={canvasSize.height}
+          width={500}
+          height={500}
           fill={canvasBackground}
         />
         {
