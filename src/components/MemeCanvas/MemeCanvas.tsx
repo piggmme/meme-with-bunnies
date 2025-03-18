@@ -67,7 +67,7 @@ export default function MemeCanvas ({
         width: `${CANVAS_SIZE * canvasRatio}px`,
         height: `${CANVAS_SIZE * canvasRatio}px`,
       }}
-      className='border border-gray-300 flex items-center justify-center box-content'
+      className='shadow-md flex items-center justify-center box-content'
     >
       <Layer ref={layerRef}>
         <Rect

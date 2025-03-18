@@ -12,21 +12,10 @@ import '../styles/global.css';
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
     <title>Meme With Bunnies</title>
   </head>
-  <body>
-    <h1>Meme With Bunnies</h1>
-    <main>
+  <body class='bg-gray-50 flex flex-col items-center'>
+    <h1 class='text-gray-800 text-2xl mt-6 mb-8'>Meme With Bunnies</h1>
+    <main class='h-svh px-2'>
       <MemeStudio client:only='react' />
     </main>
   </body>
 </html>
-
-<style lang='scss'>
- h1 {
-    text-align: center;
-    font-size: 2rem;
-    margin: 2rem 0;
- }
- main {
-  height: 100vh;
- }
-</style>

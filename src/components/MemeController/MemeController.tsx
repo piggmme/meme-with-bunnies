@@ -15,6 +15,7 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer'
 import { resetCanvasRatio, updateCanvasRatio } from '@/stores/canvasState'
+import { FaceIcon, BoxModelIcon, ImageIcon } from '@radix-ui/react-icons'
 
 type ControllerType = 'giphy' | 'background' | 'image'
 
@@ -54,13 +55,17 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
   const sheetHeight = window.innerHeight - studioRefHeight - 10
 
   return (
-    <div ref={controllers}>
+    <div
+      className='bg-white shadow-md flex rounded-sm max-w-svw w-fit gap-2 py-6 px-8  mt-5 overflow-x-scroll'
+      ref={controllers}
+    >
       <ControllerDrawer
         title='GIPHY'
         open={openedController === 'giphy'}
         setOpen={(open: boolean) => setOpenedController(open ? 'giphy' : null)}
         scrollToCanvas={scrollToCanvas}
         sheetHeight={window.innerHeight * 0.6 - controllerHeight}
+        icon={<FaceIcon width='25' height='25' />}
       >
         <GiphyList />
       </ControllerDrawer>
@@ -71,6 +76,7 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
         setOpen={(open: boolean) => setOpenedController(open ? 'background' : null)}
         scrollToCanvas={scrollToCanvas}
         sheetHeight={sheetHeight}
+        icon={<BoxModelIcon width='25' height='25' />}
       >
         <BackgroundController />
       </ControllerDrawer>
@@ -81,6 +87,7 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
         setOpen={(open: boolean) => setOpenedController(open ? 'image' : null)}
         scrollToCanvas={scrollToCanvas}
         sheetHeight={sheetHeight}
+        icon={<ImageIcon width='25' height='25' />}
       >
         <ImageUploadController />
       </ControllerDrawer>
@@ -100,6 +107,7 @@ function ControllerDrawer ({
   children,
   scrollToCanvas,
   sheetHeight,
+  icon,
 }:
 {
   title: string
@@ -109,17 +117,22 @@ function ControllerDrawer ({
   scrollToCanvas: (open: boolean) => void
   sheetHeight: number
   modal?: boolean
+  icon?: React.ReactNode
 }) {
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   return (
     <>
-      <Button onClick={() => {
-        scrollToCanvas(!open)
-        // fix: 컨트롤러 클릭시 캔버스 상단까지 스크롤 안하는 버그 때문에 우회하여 모달 trigger 클릭 처리
-        setTimeout(() => buttonRef.current?.click(), 300)
-      }}
+      <Button
+        variant='ghost'
+        className='text-gray-600 flex flex-col text-xs'
+        onClick={() => {
+          scrollToCanvas(!open)
+          // fix: 컨트롤러 클릭시 캔버스 상단까지 스크롤 안하는 버그 때문에 우회하여 모달 trigger 클릭 처리
+          setTimeout(() => buttonRef.current?.click(), 300)
+        }}
       >
+        {icon}
         {title}
       </Button>
       <Drawer
@@ -127,7 +140,7 @@ function ControllerDrawer ({
         open={open}
         onOpenChange={setOpen}
       >
-        <DrawerTrigger style={{ visibility: 'hidden' }} ref={buttonRef}>
+        <DrawerTrigger style={{ display: 'none' }} ref={buttonRef}>
         </DrawerTrigger>
         <DrawerContent style={{ height: `${sheetHeight}px` }}>
           <DrawerHeader>

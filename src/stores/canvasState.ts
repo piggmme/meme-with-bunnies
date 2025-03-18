@@ -7,9 +7,9 @@ interface CanvasSize {
   height: number
 }
 
-const CANVAS_PADDING = 0
+const CANVAS_PADDING = 14
 export const CANVAS_SIZE = 500
-const CANVAS_RATIO = Math.min(window.innerWidth, CANVAS_SIZE) / CANVAS_SIZE
+const CANVAS_RATIO = Math.min(window.innerWidth - (CANVAS_PADDING * 2), CANVAS_SIZE) / CANVAS_SIZE
 
 export const $canvasPosition = atom<{ x: number, y: number }>({ x: 0, y: 0 })
 export const $canvasClientSize = atom<{ width: number, height: number }>({ width: 0, height: 0 })
