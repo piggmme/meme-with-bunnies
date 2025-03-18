@@ -16,8 +16,11 @@ import {
 } from '@/components/ui/drawer'
 import { resetCanvasRatio, updateCanvasRatio } from '@/stores/canvasState'
 import { FaceIcon, BoxModelIcon, ImageIcon } from '@radix-ui/react-icons'
+import { INNDER_PADDING } from '@/constants/style'
 
 type ControllerType = 'giphy' | 'background' | 'image'
+
+const MARGIN_TOP = 20
 
 export default function MemeController ({ stageRef, layerRef, studioRefHeight }: {
   stageRef: React.RefObject<KonvaStage | null>
@@ -51,12 +54,14 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
       })
     }
   }
+
   const controllerHeight = controllers.current?.getBoundingClientRect().height ?? 0
   const sheetHeight = window.innerHeight - studioRefHeight - 10
 
   return (
     <div
-      className='bg-white shadow-md flex rounded-sm max-w-svw w-fit gap-2 py-6 px-8  mt-5 overflow-x-scroll'
+      className='bg-white shadow-md flex rounded-sm gap-2 py-6 px-8 overflow-x-scroll'
+      style={{ marginTop: MARGIN_TOP, maxWidth: window.innerWidth - INNDER_PADDING * 2 }}
       ref={controllers}
     >
       <ControllerDrawer
@@ -64,7 +69,7 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
         open={openedController === 'giphy'}
         setOpen={(open: boolean) => setOpenedController(open ? 'giphy' : null)}
         scrollToCanvas={scrollToCanvas}
-        sheetHeight={window.innerHeight * 0.6 - controllerHeight}
+        sheetHeight={window.innerHeight * 0.6 - controllerHeight - MARGIN_TOP}
         icon={<FaceIcon width='25' height='25' />}
       >
         <GiphyList />

@@ -1,3 +1,4 @@
+import { INNDER_PADDING } from '@/constants/style'
 import type { CanvasImage } from '@/types/canvas'
 import { useStore } from '@nanostores/react'
 import { atom } from 'nanostores'
@@ -7,7 +8,7 @@ interface CanvasSize {
   height: number
 }
 
-const CANVAS_PADDING = 14
+const CANVAS_PADDING = INNDER_PADDING
 export const CANVAS_SIZE = 500
 const CANVAS_RATIO = Math.min(window.innerWidth - (CANVAS_PADDING * 2), CANVAS_SIZE) / CANVAS_SIZE
 
