@@ -29,8 +29,7 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
   useEffect(() => {
     if (openedController === 'giphy') {
       updateCanvasRatio(window.innerHeight * 0.4)
-    }
-    if (openedController === null) {
+    } else {
       resetCanvasRatio()
     }
   }, [openedController])
