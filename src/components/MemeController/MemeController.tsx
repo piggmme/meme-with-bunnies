@@ -60,46 +60,52 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
 
   return (
     <div
-      className='bg-white shadow-md flex rounded-sm gap-2 py-6 px-8 overflow-x-scroll'
+      className='relative'
       style={{ marginTop: MARGIN_TOP, maxWidth: window.innerWidth - INNDER_PADDING * 2 }}
-      ref={controllers}
     >
-      <ControllerDrawer
-        title='GIPHY'
-        open={openedController === 'giphy'}
-        setOpen={(open: boolean) => setOpenedController(open ? 'giphy' : null)}
-        scrollToCanvas={scrollToCanvas}
-        sheetHeight={window.innerHeight * 0.6 - controllerHeight - MARGIN_TOP}
-        icon={<FaceIcon width='25' height='25' />}
+      <div className='absolute right-0 top-0 w-16 h-full bg-gradient-to-l from-white to-transparent z-10' />
+      <div
+        ref={controllers}
+        className='bg-white shadow-md flex gap-2 py-6 px-8 overflow-x-auto hide-scrollbar'
+        style={{ maxWidth: window.innerWidth - INNDER_PADDING * 2 }}
       >
-        <GiphyList />
-      </ControllerDrawer>
+        <ControllerDrawer
+          title='GIPHY'
+          open={openedController === 'giphy'}
+          setOpen={(open: boolean) => setOpenedController(open ? 'giphy' : null)}
+          scrollToCanvas={scrollToCanvas}
+          sheetHeight={window.innerHeight * 0.6 - controllerHeight - MARGIN_TOP}
+          icon={<FaceIcon width='25' height='25' />}
+        >
+          <GiphyList />
+        </ControllerDrawer>
 
-      <ControllerDrawer
-        title='배경색'
-        open={openedController === 'background'}
-        setOpen={(open: boolean) => setOpenedController(open ? 'background' : null)}
-        scrollToCanvas={scrollToCanvas}
-        sheetHeight={sheetHeight}
-        icon={<BoxModelIcon width='25' height='25' />}
-      >
-        <BackgroundController />
-      </ControllerDrawer>
+        <ControllerDrawer
+          title='배경색'
+          open={openedController === 'background'}
+          setOpen={(open: boolean) => setOpenedController(open ? 'background' : null)}
+          scrollToCanvas={scrollToCanvas}
+          sheetHeight={sheetHeight}
+          icon={<BoxModelIcon width='25' height='25' />}
+        >
+          <BackgroundController />
+        </ControllerDrawer>
 
-      <ControllerDrawer
-        title='이미지'
-        open={openedController === 'image'}
-        setOpen={(open: boolean) => setOpenedController(open ? 'image' : null)}
-        scrollToCanvas={scrollToCanvas}
-        sheetHeight={sheetHeight}
-        icon={<ImageIcon width='25' height='25' />}
-      >
-        <ImageUploadController />
-      </ControllerDrawer>
+        <ControllerDrawer
+          title='이미지'
+          open={openedController === 'image'}
+          setOpen={(open: boolean) => setOpenedController(open ? 'image' : null)}
+          scrollToCanvas={scrollToCanvas}
+          sheetHeight={sheetHeight}
+          icon={<ImageIcon width='25' height='25' />}
+        >
+          <ImageUploadController />
+        </ControllerDrawer>
 
-      <SaveController stageRef={stageRef} layerRef={layerRef} />
+        <SaveController stageRef={stageRef} layerRef={layerRef} />
 
-      <ResetController />
+        <ResetController />
+      </div>
     </div>
   )
 }
