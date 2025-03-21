@@ -1,3 +1,4 @@
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import GiphyList from '../Giphy/GiphyList'
 import BackgroundController from './BackgroundController'
 import ImageUploadController from './ImageUploadController'
@@ -160,7 +161,9 @@ function ControllerDrawer ({
         </DrawerTrigger>
         <DrawerContent style={{ height: `${sheetHeight}px` }}>
           <DrawerHeader>
-            <DrawerTitle>{title}</DrawerTitle>
+            <VisuallyHidden.Root>
+              <DrawerTitle>{title}</DrawerTitle>
+            </VisuallyHidden.Root>
           </DrawerHeader>
           {children}
         </DrawerContent>

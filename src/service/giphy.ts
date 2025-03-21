@@ -1,23 +1,28 @@
 import type { GiphyGif } from '@/types/giphy'
+import { nanoquery } from '@nanostores/query'
+import axios from 'axios'
+import { $activeQuery } from '@/stores/giphyState'
+import { useStore } from '@nanostores/react'
 
-interface fetchGifsOptions {
-  query: string
-  limit?: number
-}
-
-export const fetchGifs = async (options: fetchGifsOptions) => {
-  const { query, limit = 10 } = options
-  if (!query) return
-
-  try {
-    const response = await fetch(`/api/gifs?q=${encodeURIComponent(query)}&limit=${limit}`)
-    if (!response.ok) {
-      throw new Error('Failed to fetch GIFs')
-    }
-    const data = await response.json() as GiphyGif[]
+const [
+  createGiphyFetcherStore, createGiphyMutator,
+] = nanoquery({
+  fetcher: async <T>(...keys) => {
+    const [url, query] = keys
+    if (!query) return
+    if (query === '') return
+    const { data } = await axios.get<T>(`${url}?q=${encodeURIComponent(query)}&limit=10`)
     return data
-  } catch (error) {
+  },
+  onError: (error) => {
     console.error('Error fetching Giphy data', error)
-    throw error
-  }
+  },
+  onErrorRetry: null,
+})
+
+export const $giphyState = createGiphyFetcherStore<GiphyGif[]>(['/api/gifs', $activeQuery])
+
+export function useGiphys () {
+  const { data, loading, error } = useStore($giphyState)
+  return { data, loading, error }
 }
