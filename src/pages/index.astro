@@ -14,9 +14,14 @@ import '../styles/global.css'
   </head>
   <body>
     <main class='gradient flex flex-col items-center'>
-      <section class='h-svh mt-10'>
-        <MemeStudio client:only='react' />
-        <h1 class='text-white text-xs opacity-60 text-center mt-2'>@meme_with_bunnies</h1>
+      <section>
+        <h1 class='w-full text-white text opacity-80 mt-10 mb-4'>@meme_with_bunnies</h1>
+        <div class='h-svh'>
+          <MemeStudio client:only='react' />
+          <a href='https://www.instagram.com/dev_hee/' class='block text-white text-xs opacity-60 text-center mt-2'>
+            made by @dev_hee
+          </a>
+        </div>
       </section>
     </main>
   </body>

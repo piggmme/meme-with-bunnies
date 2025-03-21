@@ -15,12 +15,14 @@ import {
 } from '@/components/ui/drawer'
 import { resetCanvasRatio, updateCanvasRatio } from '@/stores/canvasState'
 import { FaceIcon, BoxModelIcon, ImageIcon, ChevronRightIcon } from '@radix-ui/react-icons'
-import { CONTROLLER_WIDTH } from '@/constants/style'
+import { CONTROLLER_WIDTH, STUDIO_PADDING_Y } from '@/constants/style'
 import ControllerButton from './ControllerButton'
 import TextContoller from './TextContoller'
 
 type ControllerType = 'giphy' | 'background' | 'image'
 
+const CANVAS_RATIO = 0.3
+const CONTRALLER_RATIO = 1 - CANVAS_RATIO
 const MARGIN_TOP = 10
 
 export default function MemeController ({ stageRef, layerRef, studioRefHeight }: {
@@ -33,7 +35,7 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
 
   useEffect(() => {
     if (openedController === 'giphy') {
-      updateCanvasRatio(window.innerHeight * 0.4)
+      updateCanvasRatio(window.innerHeight * CANVAS_RATIO)
     } else {
       resetCanvasRatio()
     }
@@ -57,7 +59,7 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
   }
 
   const controllerHeight = controllers.current?.getBoundingClientRect().height ?? 0
-  const sheetHeight = window.innerHeight - studioRefHeight - 10
+  const sheetHeight = window.innerHeight - studioRefHeight - (STUDIO_PADDING_Y * 2)
 
   return (
     <div
@@ -74,7 +76,7 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
           open={openedController === 'giphy'}
           setOpen={(open: boolean) => setOpenedController(open ? 'giphy' : null)}
           scrollToCanvas={scrollToCanvas}
-          sheetHeight={window.innerHeight * 0.6 - controllerHeight - MARGIN_TOP}
+          sheetHeight={window.innerHeight * CONTRALLER_RATIO - controllerHeight - MARGIN_TOP - STUDIO_PADDING_Y}
           icon={<FaceIcon width='25' height='25' />}
         >
           <GiphyList />
