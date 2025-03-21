@@ -1,6 +1,6 @@
 ---
 import MemeStudio from '../components/MemeStudio/MemeStudio'
-import '../styles/global.css';
+import '../styles/global.css'
 ---
 
 <html lang='ko'>
@@ -12,10 +12,47 @@ import '../styles/global.css';
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
     <title>Meme With Bunnies</title>
   </head>
-  <body class='bg-gray-50 flex flex-col items-center'>
-    <h1 class='text-gray-800 font-semibold text-2xl mt-6 mb-8'>Meme With Bunnies</h1>
-    <main class='h-svh px-2'>
-      <MemeStudio client:only='react' />
+  <body>
+    <main class='gradient flex flex-col items-center'>
+      <section class='h-svh mt-10'>
+        <MemeStudio client:only='react' />
+        <h1 class='text-white text-xs opacity-60 text-center mt-2'>@meme_with_bunnies</h1>
+      </section>
     </main>
   </body>
 </html>
+
+<style lang='scss'>
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  .gradient {
+    background-color: hsl(266deg 76% 60%);
+    background-image: linear-gradient(
+      45deg,
+      hsl(266deg 76% 60%) 0%,
+      hsl(274deg 74% 59%) 5%,
+      hsl(282deg 72% 59%) 10%,
+      hsl(290deg 70% 58%) 16%,
+      hsl(297deg 67% 57%) 23%,
+      hsl(304deg 73% 59%) 31%,
+      hsl(310deg 84% 61%) 39%,
+      hsl(326deg 100% 66%) 48%,
+      hsl(341deg 100% 69%) 58%,
+      hsl(358deg 100% 74%) 68%,
+      hsl(13deg 100% 73%) 78%,
+      hsl(23deg 100% 73%) 89%,
+      hsl(33deg 82% 72%) 100%
+    ) !important;
+    background-size: 200% 200%;
+    animation: gradient 5s ease infinite;
+  }
+</style>

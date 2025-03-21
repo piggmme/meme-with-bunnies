@@ -7,9 +7,9 @@ import {
   $canvasClientSize,
   $canvasPosition, $canvasBackground, $canvasImages, useSelectImage,
   $canvasRatio,
-  CANVAS_SIZE,
 } from '@/stores/canvasState'
 import { useEffect } from 'react'
+import { CANVAS_SIZE } from '@/constants/style'
 
 export default function MemeCanvas ({
   stageRef,

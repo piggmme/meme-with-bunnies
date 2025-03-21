@@ -1,13 +1,13 @@
 import { resetCanvasState } from '@/stores/canvasState'
-import { ResetIcon } from '@radix-ui/react-icons'
 import ControllerButton from './ControllerButton'
+import { TextIcon } from '@radix-ui/react-icons'
 
-export default function ResetController () {
+export default function TextContoller () {
   return (
     <ControllerButton
       onClick={resetCanvasState}
-      icon={<ResetIcon width={25} height={25} />}
-      title='초기화'
+      icon={<TextIcon width={25} height={25} />}
+      title='텍스트'
     />
   )
 }

@@ -1,4 +1,3 @@
-import { Button } from '../ui/button'
 import GiphyList from '../Giphy/GiphyList'
 import BackgroundController from './BackgroundController'
 import ImageUploadController from './ImageUploadController'
@@ -15,12 +14,14 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer'
 import { resetCanvasRatio, updateCanvasRatio } from '@/stores/canvasState'
-import { FaceIcon, BoxModelIcon, ImageIcon } from '@radix-ui/react-icons'
-import { INNDER_PADDING } from '@/constants/style'
+import { FaceIcon, BoxModelIcon, ImageIcon, ChevronRightIcon } from '@radix-ui/react-icons'
+import { CONTROLLER_WIDTH } from '@/constants/style'
+import ControllerButton from './ControllerButton'
+import TextContoller from './TextContoller'
 
 type ControllerType = 'giphy' | 'background' | 'image'
 
-const MARGIN_TOP = 20
+const MARGIN_TOP = 10
 
 export default function MemeController ({ stageRef, layerRef, studioRefHeight }: {
   stageRef: React.RefObject<KonvaStage | null>
@@ -61,13 +62,12 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
   return (
     <div
       className='relative'
-      style={{ marginTop: MARGIN_TOP, maxWidth: window.innerWidth - INNDER_PADDING * 2 }}
+      style={{ marginTop: MARGIN_TOP, maxWidth: CONTROLLER_WIDTH }}
     >
-      <div className='absolute right-0 top-0 w-16 h-full bg-gradient-to-l from-white to-transparent z-10' />
       <div
         ref={controllers}
-        className='bg-white shadow-md flex gap-2 py-6 px-8 overflow-x-auto hide-scrollbar'
-        style={{ maxWidth: window.innerWidth - INNDER_PADDING * 2 }}
+        style={{ maxWidth: CONTROLLER_WIDTH }}
+        className='flex gap-8 py-3 px-5 w-fit overflow-x-auto hide-scrollbar'
       >
         <ControllerDrawer
           title='GIPHY'
@@ -103,8 +103,13 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
         </ControllerDrawer>
 
         <SaveController stageRef={stageRef} layerRef={layerRef} />
-
         <ResetController />
+        <TextContoller />
+      </div>
+      <div className='absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center text-gray-100'>
+        <button>
+          <ChevronRightIcon width='20' height='20' />
+        </button>
       </div>
     </div>
   )
@@ -134,18 +139,15 @@ function ControllerDrawer ({
 
   return (
     <>
-      <Button
-        variant='ghost'
-        className='text-gray-600 flex flex-col text-xs'
+      <ControllerButton
         onClick={() => {
           scrollToCanvas(!open)
           // fix: 컨트롤러 클릭시 캔버스 상단까지 스크롤 안하는 버그 때문에 우회하여 모달 trigger 클릭 처리
           setTimeout(() => buttonRef.current?.click(), 300)
         }}
-      >
-        {icon}
-        {title}
-      </Button>
+        icon={icon}
+        title={title}
+      />
       <Drawer
         modal={modal}
         open={open}

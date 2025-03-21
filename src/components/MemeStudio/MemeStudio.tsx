@@ -11,9 +11,9 @@ export default function MemeStudio () {
   const [studioRef, { height }] = useMeasure<HTMLDivElement>()
 
   return (
-    <section className='flex flex-col items-center' ref={studioRef}>
+    <div className='glassmorphism flex flex-col items-center py-6' ref={studioRef}>
       <MemeCanvas stageRef={stageRef} layerRef={layerRef} />
       <MemeController stageRef={stageRef} layerRef={layerRef} studioRefHeight={height ?? 0} />
-    </section>
+    </div>
   )
 }

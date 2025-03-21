@@ -3,8 +3,8 @@ import { useStore } from '@nanostores/react'
 import { downloadGif, downloadPng } from '@/utils/download'
 import { Stage as KonvaStage } from 'konva/lib/Stage'
 import { Layer as KonvaLayer } from 'konva/lib/Layer'
-import { Button } from '../ui/button'
 import { DownloadIcon } from '@radix-ui/react-icons'
+import ControllerButton from './ControllerButton'
 
 export default function SaveController ({
   stageRef,
@@ -19,9 +19,7 @@ export default function SaveController ({
 
   return (
     <>
-      <Button
-        variant='ghost'
-        className='text-gray-600 felx flex-col items-center text-xs'
+      <ControllerButton
         onClick={async () => {
           deselectImage()
           $isDownloading.set(true)
@@ -45,10 +43,9 @@ export default function SaveController ({
             $isDownloading.set(false)
           }
         }}
-      >
-        <DownloadIcon width={25} height={25} />
-        저장하기
-      </Button>
+        icon={<DownloadIcon width={25} height={25} />}
+        title='저장하기'
+      />
       {isDownloading && <div>다운로드 중...</div>}
     </>
   )
