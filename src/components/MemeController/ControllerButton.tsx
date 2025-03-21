@@ -13,7 +13,7 @@ export default function ControllerButton ({
     <button
       className={`
         flex flex-col justify-center items-center gap-2 text-xs whitespace-nowrap shrink-0 text-white
-        ${active ? 'border-b-2 border-white pb-1' : 'border-b-2 border-transparent pb-1'}
+        ${active ? 'border-b-1 border-white pb-1' : 'border-b-2 border-transparent pb-1'}
         ${className ?? ''}
       `}
       {...props}
