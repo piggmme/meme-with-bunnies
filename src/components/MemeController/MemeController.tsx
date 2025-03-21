@@ -142,6 +142,7 @@ function ControllerDrawer ({
   return (
     <>
       <ControllerButton
+        active={open}
         onClick={() => {
           scrollToCanvas(!open)
           // fix: 컨트롤러 클릭시 캔버스 상단까지 스크롤 안하는 버그 때문에 우회하여 모달 trigger 클릭 처리
