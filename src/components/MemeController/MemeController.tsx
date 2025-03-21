@@ -19,6 +19,7 @@ import { FaceIcon, BoxModelIcon, ImageIcon, ChevronRightIcon } from '@radix-ui/r
 import { CONTROLLER_WIDTH, STUDIO_PADDING_Y } from '@/constants/style'
 import ControllerButton from './ControllerButton'
 import TextContoller from './TextContoller'
+import GiphyFilter from '../Giphy/GiphyFilter'
 
 type ControllerType = 'giphy' | 'background' | 'image'
 
@@ -80,6 +81,9 @@ export default function MemeController ({ stageRef, layerRef, studioRefHeight }:
           sheetHeight={window.innerHeight * CONTRALLER_RATIO - controllerHeight - MARGIN_TOP - STUDIO_PADDING_Y}
           icon={<FaceIcon width='25' height='25' />}
         >
+          <DrawerHeader>
+            <GiphyFilter />
+          </DrawerHeader>
           <GiphyList />
         </ControllerDrawer>
 
@@ -160,11 +164,9 @@ function ControllerDrawer ({
         <DrawerTrigger style={{ display: 'none' }} ref={buttonRef}>
         </DrawerTrigger>
         <DrawerContent style={{ height: `${sheetHeight}px` }}>
-          <DrawerHeader>
-            <VisuallyHidden.Root>
-              <DrawerTitle>{title}</DrawerTitle>
-            </VisuallyHidden.Root>
-          </DrawerHeader>
+          <VisuallyHidden.Root>
+            <DrawerTitle>{title}</DrawerTitle>
+          </VisuallyHidden.Root>
           {children}
         </DrawerContent>
       </Drawer>

@@ -4,7 +4,7 @@ export default function GiphyFilter () {
   const [actoveQuery, setActiveQuery] = useActiveQuery()
 
   return (
-    <div className='sticky top-0 left-0 z-50 flex gap-2 p-2 bg-background'>
+    <div className='flex gap-2'>
       {njzs.map(njz => (
         <Button
           key={njz.name}

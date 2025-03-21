@@ -1,15 +1,12 @@
 import { useGiphys } from '@/service/giphy'
 import { $canvasImages } from '@/stores/canvasState'
 import { getImageSize } from '@/utils/editor'
-import GiphyFilter from './GiphyFilter'
 
 export default function GiphyList () {
   const { data: gifs, loading, error } = useGiphys()
 
   return (
-    <div style={{ overflow: 'scroll', overscrollBehavior: 'contain' }}>
-      <GiphyFilter />
-
+    <div className='overflow-scroll overscroll-contain'>
       <ul className='flex flex-wrap gap-2 p-2'>
         {gifs?.map(gif => (
           <li key={gif.id}>
