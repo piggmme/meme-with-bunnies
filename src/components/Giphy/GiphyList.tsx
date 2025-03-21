@@ -3,33 +3,22 @@ import { fetchGifs } from '@/service/giphy'
 import type { GiphyGif } from '@/types/giphy'
 import { $canvasImages } from '@/stores/canvasState'
 import { getImageSize } from '@/utils/editor'
-import { Button } from '../ui/button'
+import GiphyFilter from './GiphyFilter'
+import { useActiveQuery } from '@/stores/giphyState'
 
 export default function GiphyList () {
-  const [query, setQuery] = useState('bear')
+  const [activeQuery] = useActiveQuery()
   const [gifs, setGifs] = useState<GiphyGif[]>([])
 
   useEffect(() => {
-    fetchGifs({ query }).then((results) => {
+    fetchGifs({ query: activeQuery }).then((results) => {
       if (results) setGifs(results)
     })
-  }, [query])
+  }, [activeQuery])
 
   return (
     <div style={{ overflow: 'scroll', overscrollBehavior: 'contain' }}>
-      <div className='sticky top-0 left-0 z-50 flex gap-2 p-2 bg-background'>
-        {njzs.map(njz => (
-          <Button
-            variant='outline'
-            key={njz.name}
-            className='text-2xl'
-            onClick={() => {
-              setQuery(njz.name)
-            }}
-          >{njz.emoji}
-          </Button>
-        ))}
-      </div>
+      <GiphyFilter />
 
       <ul className='flex flex-wrap gap-2 p-2'>
         {gifs.map(gif => (
@@ -57,30 +46,6 @@ export default function GiphyList () {
           </li>
         ))}
       </ul>
-
     </div>
   )
 }
-
-const njzs = [
-  {
-    name: 'bear',
-    emoji: '🐻',
-  },
-  {
-    name: 'otter',
-    emoji: '🦦',
-  },
-  {
-    name: 'cat',
-    emoji: '🐱',
-  },
-  {
-    name: 'dog',
-    emoji: '🐶',
-  },
-  {
-    name: 'hamster',
-    emoji: '🐹',
-  },
-]
