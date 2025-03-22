@@ -1,28 +1,19 @@
 import type { GiphyGif } from '@/types/giphy'
-import { nanoquery } from '@nanostores/query'
-import axios from 'axios'
-import { $activeQuery } from '@/stores/giphyState'
-import { useStore } from '@nanostores/react'
+import axios from './axios'
+import type { PaginationOptions } from '@/hooks/usePagination'
+import usePagination from '@/hooks/usePagination'
 
-const [
-  createGiphyFetcherStore, createGiphyMutator,
-] = nanoquery({
-  fetcher: async <T>(...keys) => {
-    const [url, query] = keys
-    if (!query) return
-    if (query === '') return
-    const { data } = await axios.get<T>(`${url}?q=${encodeURIComponent(query)}&limit=10`)
-    return data
-  },
-  onError: (error) => {
-    console.error('Error fetching Giphy data', error)
-  },
-  onErrorRetry: null,
-})
+export const fetchGifs = async (options: PaginationOptions) => {
+  const { query, limit = 10, offset = 0 } = options
+  if (!query) return
 
-export const $giphyState = createGiphyFetcherStore<GiphyGif[]>(['/api/gifs', $activeQuery])
+  console.log({ query, limit, offset })
+  return await axios.get<GiphyGif[]>(`/api/gifs?q=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`)
+}
 
-export function useGiphys () {
-  const { data, loading, error } = useStore($giphyState)
-  return { data, loading, error }
+export const useGifPagination = () => {
+  return usePagination<GiphyGif>(async (option: PaginationOptions) => {
+    const response = await fetchGifs(option)
+    return response?.data
+  })
 }

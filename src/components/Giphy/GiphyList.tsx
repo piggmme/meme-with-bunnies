@@ -1,9 +1,23 @@
-import { useGiphys } from '@/service/giphy'
+import useInfiniteScroll from '@/hooks/useInfiniteScroll'
+import { useGifPagination } from '@/service/giphy'
 import { $canvasImages } from '@/stores/canvasState'
+import { $activeQuery } from '@/stores/giphyState'
 import { getImageSize } from '@/utils/editor'
+import { useStore } from '@nanostores/react'
+import { useEffect } from 'react'
 
 export default function GiphyList () {
-  const { data: gifs, loading, error } = useGiphys()
+  const activeQuery = useStore($activeQuery)
+  const { items: gifs, fetchMore, loading } = useGifPagination()
+
+  useEffect(function firstFetch () {
+    fetchMore(activeQuery)
+  }, [activeQuery])
+
+  const fetchGifs = async () => {
+    await fetchMore(activeQuery)
+  }
+  const ref = useInfiniteScroll(fetchGifs)
 
   return (
     <div className='overflow-scroll overscroll-contain'>
@@ -32,6 +46,7 @@ export default function GiphyList () {
           </li>
         ))}
       </ul>
+      <div ref={ref} className='h-1 mb-2' />
     </div>
   )
 }
