@@ -1,5 +1,5 @@
+import useGifPagination from '@/hooks/useGifPagination'
 import useInfiniteScroll from '@/hooks/useInfiniteScroll'
-import { useGifPagination } from '@/service/giphy'
 import { $canvasImages } from '@/stores/canvasState'
 import { $activeQuery } from '@/stores/giphyState'
 import { getImageSize } from '@/utils/editor'
