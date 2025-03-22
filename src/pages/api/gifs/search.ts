@@ -8,6 +8,7 @@ const GIPHY_SEARCH_URL = 'https://api.giphy.com/v1/gifs/search'
 export const GET: APIRoute = async ({ url }) => {
   const query = url.searchParams.get('q')
   const limit = url.searchParams.get('limit') || '10'
+  const offset = url.searchParams.get('offset') || '0'
 
   if (!query) {
     return new Response(JSON.stringify({ error: 'Query is required' }), {
@@ -22,6 +23,7 @@ export const GET: APIRoute = async ({ url }) => {
         api_key: GIPHY_API_KEY,
         q: query,
         limit: parseInt(limit),
+        offset: parseInt(offset),
       },
     })
 
